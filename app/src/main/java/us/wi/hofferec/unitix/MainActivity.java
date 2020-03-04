@@ -23,10 +23,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sellTicket(View view) {
-//        Intent intent = new Intent(getApplicationContext(), SELLTICKETACTIVITYHERE.class);
-//        startActivity(intent);
-//        finish();
-        Toast.makeText(this, "Sell button clicked.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), SellTicketActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void goToProfile(View view){
