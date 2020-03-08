@@ -5,6 +5,6 @@
     <color name="colorPrimaryDark">#8B0037</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorSecondary">#FFBF00</color>
-    <color name="colorSecondaryDark">#FF8000</color>
+    <color name="colorAccent">#FFBF00</color>
+    <color name="colorAccentDark">#FF8000</color>
 </resources>
