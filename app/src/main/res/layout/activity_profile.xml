@@ -17,7 +17,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_profile" />
+        app:srcCompat="@drawable/ic_person_black_24dp"/>
 
     <ImageView
         android:id="@+id/iv_profile_home"
@@ -30,7 +30,7 @@
         android:onClick="goToHome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_house" />
+        app:srcCompat="@drawable/ic_home_black_24dp" />
 
     <Button
         android:id="@+id/btn_profile_settings"
@@ -56,6 +56,8 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_profile_settings" />
 
     <ScrollView
+        android:background="@drawable/stroke_bg"
+        android:fillViewport="true"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
