@@ -9,21 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TicketPostedActivity"></activity>
-        <activity android:name=".SellTicketActivity" />
-        <activity android:name=".TicketMarketplaceActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".activities.TicketPostedActivity"></activity>
+        <activity android:name=".activities.SellTicketActivity" />
+        <activity android:name=".activities.TicketMarketplaceActivity" />
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".ProfileActivity">
+            android:parentActivityName=".activities.ProfileActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ProfileActivity"/>
+                android:value=".activities.ProfileActivity"/>
         </activity>
-        <activity android:name=".SettingsFragment" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".fragments.SettingsFragment" />
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
