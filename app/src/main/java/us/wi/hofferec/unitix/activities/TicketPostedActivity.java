@@ -1,6 +1,5 @@
-package us.wi.hofferec.unitix;
+package us.wi.hofferec.unitix.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import us.wi.hofferec.unitix.R;
+
 public class TicketPostedActivity extends AppCompatActivity {
 
     private RecyclerView marketRecyclerView;
@@ -22,8 +23,6 @@ public class TicketPostedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_posted);
-
-        marketRecyclerView = findViewById(R.id.market_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

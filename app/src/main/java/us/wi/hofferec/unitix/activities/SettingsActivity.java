@@ -1,12 +1,13 @@
-package us.wi.hofferec.unitix;
+package us.wi.hofferec.unitix.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.fragments.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 
