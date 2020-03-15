@@ -1,6 +1,7 @@
 package us.wi.hofferec.unitix.data;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,7 @@ public class Ticket {
     private String homeTeam;
     private String awayTeam;
     private String event;
+    private String price;
     private static int id;
     private boolean isAvailable;
 
@@ -31,13 +33,34 @@ public class Ticket {
      * @param awayTeam awayTeam to set
      * @param event event to set
      */
-    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean isAvailable) {
+    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean isAvailable, double price) {
         this.date = date;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.event = event;
         this.isAvailable = isAvailable;
+        DecimalFormat df = new DecimalFormat("#.##");
+        this.price = df.format(price);
         id++;
+    }
+
+    /**
+     * Getter for price
+     *
+     * @return current price
+     */
+    public String getPrice() {
+        return price;
+    }
+
+    /**
+     * Setter for price.
+     *
+     * @param price price to set
+     */
+    public void setPrice(double price) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        this.price = df.format(price);
     }
 
     /**
@@ -161,6 +184,7 @@ public class Ticket {
         String date = dateFormat.format(today);
         double isAvailableRand;
         boolean isAvailable;
+        double price = 10.35;
 
         for(int i = 0 ; i < numTickets ; i++) {
             awayTeamRand = getRandomIntegerBetweenRange(0, teams.length - 1);
@@ -168,7 +192,7 @@ public class Ticket {
             eventsRand = getRandomIntegerBetweenRange(0, events.length - 1);
             isAvailableRand = getRandomIntegerBetweenRange(0, 1);
             isAvailable = isAvailableRand == 1;
-            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable);
+            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable, price);
             tickets.add(ticket);
         }
 

@@ -81,7 +81,6 @@
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
-            android:id="@+id/tv_details_event"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -90,7 +89,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_details_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -99,11 +97,18 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_details_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Date"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Price"
             android:textSize="20sp"
             android:textStyle="bold" />
 

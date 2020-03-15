@@ -26,6 +26,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
         public TextView eventTextView;
         public TextView infoTextView;
         public TextView dateTextView;
+        public TextView priceTextView;
         public Button buyButton;
 
         /**
@@ -39,6 +40,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
             eventTextView = itemView.findViewById(R.id.tv_details_event);
             infoTextView = itemView.findViewById(R.id.tv_details_info);
             dateTextView = itemView.findViewById(R.id.tv_details_date);
+            priceTextView = itemView.findViewById(R.id.tv_details_price);
             buyButton = itemView.findViewById(R.id.buy_button);
         }
     }
@@ -85,6 +87,8 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
         TextView eventTextView;
         TextView infoTextView;
         TextView dateTextView;
+        TextView priceTextView;
+        Button button;
 
         eventTextView = holder.eventTextView;
         eventTextView.setText(ticket.getEvent());
@@ -96,7 +100,11 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
         dateTextView = holder.dateTextView;
         dateTextView.setText(ticket.getDate());
 
-        Button button = holder.buyButton;
+        priceTextView = holder.priceTextView;
+        StringBuilder price = new StringBuilder("$" + ticket.getPrice());
+        priceTextView.setText(price);
+
+        button = holder.buyButton;
         button.setText(ticket.isAvailable() ? "Buy" : "Unavailable");
         button.setEnabled(ticket.isAvailable());
     }
