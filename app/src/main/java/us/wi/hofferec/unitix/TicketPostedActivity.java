@@ -23,7 +23,7 @@ public class TicketPostedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_posted);
 
-        marketRecyclerView = findViewById(R.id.market_recycler_view);
+//        marketRecyclerView = findViewById(R.id.market_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
