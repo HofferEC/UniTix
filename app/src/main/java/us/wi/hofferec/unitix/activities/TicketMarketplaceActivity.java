@@ -32,15 +32,8 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         // change focus from search (Really annoying... WHY ANDROID?)
         rvTickets.requestFocus();
 
-        // Initialize example tickets
-        Date date = new Date();
-        String homeTeam = "Wisconsin";
-        String awayTeam = "Michigan";
-        String event = "BasketBall";
-        boolean isAvailable = true;
-        Ticket ticket = new Ticket(date, homeTeam, awayTeam, event, isAvailable);
-        tickets.add(ticket);
-
+        // Initialize example tickets TODO replace with Firebase
+        tickets = Ticket.getTickets(20);
 
         // Create adapter passing in the sample data
         TicketsAdapter adapter = new TicketsAdapter(tickets);

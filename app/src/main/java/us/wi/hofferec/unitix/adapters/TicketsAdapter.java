@@ -23,7 +23,9 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView detailsTextView;
+        public TextView eventTextView;
+        public TextView infoTextView;
+        public TextView dateTextView;
         public Button buyButton;
 
         /**
@@ -34,7 +36,9 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
          */
         public ViewHolder(View itemView) {
             super(itemView);
-            detailsTextView = itemView.findViewById(R.id.details_textView);
+            eventTextView = itemView.findViewById(R.id.tv_details_event);
+            infoTextView = itemView.findViewById(R.id.tv_details_info);
+            dateTextView = itemView.findViewById(R.id.tv_details_date);
             buyButton = itemView.findViewById(R.id.buy_button);
         }
     }
@@ -78,8 +82,19 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
         Ticket ticket = mTickets.get(position);
 
         // Set item views based on our views and data model
-        TextView textView = holder.detailsTextView;
-        textView.setText(ticket.getEvent());
+        TextView eventTextView;
+        TextView infoTextView;
+        TextView dateTextView;
+
+        eventTextView = holder.eventTextView;
+        eventTextView.setText(ticket.getEvent());
+
+        infoTextView = holder.infoTextView;
+        StringBuilder info = new StringBuilder(ticket.getAwayTeam() + " @ " + ticket.getHomeTeam());
+        infoTextView.setText(info);
+
+        dateTextView = holder.dateTextView;
+        dateTextView.setText(ticket.getDate().toString());
 
         Button button = holder.buyButton;
         button.setText(ticket.isAvailable() ? "Buy" : "Unavailable");

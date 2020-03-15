@@ -1,6 +1,8 @@
 package us.wi.hofferec.unitix.data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Represents the data model for a ticket.
@@ -134,5 +136,36 @@ public class Ticket {
      */
     public void setEvent(String event) {
         this.event = event;
+    }
+
+    public static ArrayList<Ticket> getTickets(int numTickets){
+        ArrayList<Ticket> tickets = new ArrayList<>();
+
+        String[] teams = {"Wisconsin", "Michigan", "Ohio State", "Nebraska", "Iowa", "Rutgers", "Indiana", "Michigan State", "Maryland", "Penn State", "Minnesota", "Purdue"};
+        String[] events = {"Basketball", "Baseball", "Football", "Soccer", "Tennis", "Bowling"};
+
+        int awayTeamRand;
+        int homeTeamRand;
+        int eventsRand;
+        Date date = new Date();
+        double isAvailableRand;
+        boolean isAvailable;
+
+        for(int i = 0 ; i < numTickets ; i++) {
+            awayTeamRand = getRandomIntegerBetweenRange(0, teams.length - 1);
+            homeTeamRand = getRandomIntegerBetweenRange(0, teams.length - 1);
+            eventsRand = getRandomIntegerBetweenRange(0, events.length - 1);
+            isAvailableRand = getRandomIntegerBetweenRange(0, 1);
+            isAvailable = isAvailableRand == 1;
+            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable);
+            tickets.add(ticket);
+        }
+
+        return tickets;
+    }
+
+    private static int getRandomIntegerBetweenRange(double min, double max){
+        double x = (int)(Math.random()*((max-min)+1))+min;
+        return (int)x;
     }
 }
