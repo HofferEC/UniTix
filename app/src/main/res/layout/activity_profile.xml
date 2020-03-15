@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
     tools:context=".ProfileActivity">
 
     <ImageView
@@ -39,7 +40,7 @@
         android:text="Settings"
         android:textAppearance="@style/SubHeader"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="goToSettings"
+        android:onClick="openSettingsFragment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
