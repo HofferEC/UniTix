@@ -5,14 +5,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -28,11 +27,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         switch (key) {
             case "notificationsKey":
                 boolean on = sharedPreferences.getBoolean("notificationsKey", false);
-                if (on) {
+                if (on)
                     Toast.makeText(getActivity(), "Notifications enabled", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getActivity(), "Notifications disabled", Toast.LENGTH_SHORT).show();
+                break;
+            case "darkModeEnabled":
+                on = sharedPreferences.getBoolean("darkModeEnabled", false);
+                if(on) {
+                    Toast.makeText(getActivity(), "Dark Theme enabled", Toast.LENGTH_SHORT).show();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 }
                 else {
-                    Toast.makeText(getActivity(), "Notifications disabled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Dark Theme disabled", Toast.LENGTH_SHORT).show();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 }
                 break;
         }

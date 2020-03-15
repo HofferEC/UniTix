@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
     <PreferenceCategory
-        android:title="Basic Settings">
+        android:title="Basic Settings"
+        android:textSize="20px">
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:title="Enable Notifications"
             android:key="notificationsKey"
-            android:summaryOff="Notifications off"
-            android:summaryOn="Notifications on"
-            android:title="Enable Notifications">
+            android:defaultValue="false"
+            app:allowDividerBelow="true"
+            app:allowDividerAbove="true">
         </SwitchPreference>
+
+        <SwitchPreference
+            android:title="Dark Theme"
+            android:key="darkModeEnabled"
+            android:defaultValue="false"
+            app:allowDividerBelow="true"
+            app:allowDividerAbove="true">
+        </SwitchPreference>
+
+        <ListPreference
+            android:title="Currency"
+            android:key="currency"
+            android:summary="%s"
+            android:defaultValue="1"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues"
+            app:allowDividerBelow="true"
+            app:allowDividerAbove="true">
+        </ListPreference>
 
     </PreferenceCategory>
 
