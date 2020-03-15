@@ -1,15 +1,16 @@
 package us.wi.hofferec.unitix.data;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * Represents the data model for a ticket.
  */
 public class Ticket {
 
-    private Date date;
+    private String date;
     private String homeTeam;
     private String awayTeam;
     private String event;
@@ -30,7 +31,7 @@ public class Ticket {
      * @param awayTeam awayTeam to set
      * @param event event to set
      */
-    public Ticket(Date date, String homeTeam, String awayTeam, String event, boolean isAvailable) {
+    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean isAvailable) {
         this.date = date;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -71,7 +72,7 @@ public class Ticket {
      *
      * @return current date
      */
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -80,7 +81,7 @@ public class Ticket {
      *
      * @param date date to set
      */
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -138,7 +139,15 @@ public class Ticket {
         this.event = event;
     }
 
-    public static ArrayList<Ticket> getTickets(int numTickets){
+    /**
+     * Will simulate a list of tickets
+     *
+     * For testing only
+     *
+     * @param numTickets number of tickets to simulate
+     * @return list of random tickets
+     */
+    public static ArrayList<Ticket> getTickets(int numTickets) {
         ArrayList<Ticket> tickets = new ArrayList<>();
 
         String[] teams = {"Wisconsin", "Michigan", "Ohio State", "Nebraska", "Iowa", "Rutgers", "Indiana", "Michigan State", "Maryland", "Penn State", "Minnesota", "Purdue"};
@@ -147,7 +156,9 @@ public class Ticket {
         int awayTeamRand;
         int homeTeamRand;
         int eventsRand;
-        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        Date today = new Date();
+        String date = dateFormat.format(today);
         double isAvailableRand;
         boolean isAvailable;
 
@@ -164,6 +175,13 @@ public class Ticket {
         return tickets;
     }
 
+    /**
+     * Helper method for random generator.
+     *
+     * @param min min number
+     * @param max max number
+     * @return random number between min and max
+     */
     private static int getRandomIntegerBetweenRange(double min, double max){
         double x = (int)(Math.random()*((max-min)+1))+min;
         return (int)x;

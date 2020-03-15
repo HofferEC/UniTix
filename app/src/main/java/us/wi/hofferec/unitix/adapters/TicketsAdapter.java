@@ -94,7 +94,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
         infoTextView.setText(info);
 
         dateTextView = holder.dateTextView;
-        dateTextView.setText(ticket.getDate().toString());
+        dateTextView.setText(ticket.getDate());
 
         Button button = holder.buyButton;
         button.setText(ticket.isAvailable() ? "Buy" : "Unavailable");

@@ -33,7 +33,7 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         rvTickets.requestFocus();
 
         // Initialize example tickets TODO replace with Firebase
-        tickets = Ticket.getTickets(20);
+        tickets = Ticket.getTickets(100);
 
         // Create adapter passing in the sample data
         TicketsAdapter adapter = new TicketsAdapter(tickets);
