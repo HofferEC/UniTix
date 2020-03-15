@@ -16,10 +16,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openMarketplace(View view) {
-//        Intent intent = new Intent(getApplicationContext(), MARKETPLACEACTIVITYHERE.class);
-//        startActivity(intent);
-//        finish();
-        Toast.makeText(this, "Buy button clicked.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), TicketMarketplaceActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void sellTicket(View view) {
