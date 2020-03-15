@@ -15,7 +15,6 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".TicketMarketplaceActivity" />
         <activity android:name=".SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".ProfileActivity">
