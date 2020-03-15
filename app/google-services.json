@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "419605381493",
+    "firebase_url": "https://unitix-40998.firebaseio.com",
+    "project_id": "unitix-40998",
+    "storage_bucket": "unitix-40998.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419605381493:android:e17462c33ba276f53cd33c",
+        "android_client_info": {
+          "package_name": "us.wi.hofferec.unitix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419605381493-dlvb473qd05u8ulukkh43f11r4mf0ofp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUyXLHYGwD62Rj-5B2BAx8_Xb5ctJWaA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419605381493-dlvb473qd05u8ulukkh43f11r4mf0ofp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
