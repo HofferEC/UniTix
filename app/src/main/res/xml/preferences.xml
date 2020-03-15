@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <PreferenceCategory
+        android:title="Basic Settings">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="notificationsKey"
+            android:summaryOff="Notifications off"
+            android:summaryOn="Notifications on"
+            android:title="Enable Notifications">
+        </SwitchPreference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
