@@ -1,6 +1,7 @@
 package us.wi.hofferec.unitix;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
@@ -20,6 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         boolean notification_switch = sharedPreferences.getBoolean(SettingsActivity.NOTIFICATION_SWITCH, false);
         Toast.makeText(this, Boolean.toString(notification_switch), Toast.LENGTH_SHORT).show();
 

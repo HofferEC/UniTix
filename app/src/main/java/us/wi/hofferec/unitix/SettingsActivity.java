@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String NOTIFICATION_SWITCH = "notificationsKey";
+    public static final String CURRENCY = "currency";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
