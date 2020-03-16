@@ -1,5 +1,6 @@
 package us.wi.hofferec.unitix.data;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -9,7 +10,8 @@ import java.util.Date;
 /**
  * Represents the data model for a ticket.
  */
-public class Ticket {
+@SuppressWarnings("serial")
+public class Ticket implements Serializable {
 
     private String date;
     private String homeTeam;

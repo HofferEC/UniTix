@@ -1,6 +1,7 @@
 package us.wi.hofferec.unitix.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.activities.ConfirmPurchaseActivity;
+import us.wi.hofferec.unitix.activities.TicketMarketplaceActivity;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHolder> {
@@ -81,7 +84,7 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get the data model based on position
-        Ticket ticket = mTickets.get(position);
+        final Ticket ticket = mTickets.get(position);
 
         // Set item views based on our views and data model
         TextView eventTextView;
@@ -107,6 +110,15 @@ public class TicketsAdapter extends RecyclerView.Adapter<TicketsAdapter.ViewHold
         button = holder.buyButton;
         button.setText(ticket.isAvailable() ? "Buy" : "Unavailable");
         button.setEnabled(ticket.isAvailable());
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ConfirmPurchaseActivity.class);
+                intent.putExtra("ticket", ticket);
+                view.getContext().startActivity(intent);
+
+            }
+        });
     }
 
     /**
