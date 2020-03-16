@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import us.wi.hofferec.unitix.R;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -36,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void logout(View view){
+        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();

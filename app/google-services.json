@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "419605381493-qoml0fdtksbksl2o5tvkhbmu6cfcncj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "us.wi.hofferec.unitix",
+            "certificate_hash": "c23b491b42d207c2108243a443717d301a6faa8d"
+          }
+        },
+        {
           "client_id": "419605381493-dlvb473qd05u8ulukkh43f11r4mf0ofp.apps.googleusercontent.com",
           "client_type": 3
         }

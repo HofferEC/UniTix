@@ -91,6 +91,7 @@
         android:id="@+id/tv_login_signup_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:onClick="openSignUp"
         android:text="Don't have an account?\nSign up!"
