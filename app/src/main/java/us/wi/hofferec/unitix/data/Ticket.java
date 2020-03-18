@@ -2,7 +2,6 @@ package us.wi.hofferec.unitix.data;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,10 +18,10 @@ public class Ticket implements Serializable {
     private String event;
     private String price;
     private static int id;
-    private boolean isAvailable;
+    private boolean available;
 
     /**
-     * Empty Constructor
+     * Empty Constructor (Used for FireStore serialization)
      */
     public Ticket() {
     }
@@ -35,14 +34,13 @@ public class Ticket implements Serializable {
      * @param awayTeam awayTeam to set
      * @param event event to set
      */
-    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean isAvailable, double price) {
+    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean available, String price) {
         this.date = date;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.event = event;
-        this.isAvailable = isAvailable;
-        DecimalFormat df = new DecimalFormat("#.##");
-        this.price = df.format(price);
+        this.available = available;
+        this.price = price;
         id++;
     }
 
@@ -60,27 +58,26 @@ public class Ticket implements Serializable {
      *
      * @param price price to set
      */
-    public void setPrice(double price) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        this.price = df.format(price);
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     /**
-     * Getter for isAvailable.
+     * Getter for available.
      *
-     * @return current isAvailable
+     * @return current available
      */
     public boolean isAvailable() {
-        return isAvailable;
+        return available;
     }
 
     /**
-     * Setter for isAvailable.
+     * Setter for available.
      *
-     * @param available isAvailable to set
+     * @param available available to set
      */
     public void setAvailable(boolean available) {
-        isAvailable = available;
+        this.available = available;
     }
 
     /**
@@ -186,7 +183,7 @@ public class Ticket implements Serializable {
         String date = dateFormat.format(today);
         double isAvailableRand;
         boolean isAvailable;
-        double price = 10.35;
+        String price = "10.35";
 
         for(int i = 0 ; i < numTickets ; i++) {
             awayTeamRand = getRandomIntegerBetweenRange(0, teams.length - 1);

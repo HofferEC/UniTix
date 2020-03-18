@@ -3,46 +3,63 @@ package us.wi.hofferec.unitix.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.Date;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.adapters.TicketsAdapter;
+import us.wi.hofferec.unitix.adapters.TicketAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class TicketMarketplaceActivity extends AppCompatActivity {
 
-    private static ArrayList<Ticket> tickets = new ArrayList<>();
+    private FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private CollectionReference ticketsRef;
+    private TicketAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_marketplace);
 
-        // Lookup the recyclerview in activity layout
-        RecyclerView rvTickets = findViewById(R.id.rv_find_ticket_details);
+        ticketsRef = database.collection("tickets");
 
-        // change focus from search (Really annoying... WHY ANDROID?)
-        rvTickets.requestFocus();
+        setupRecyclerView();
+    }
 
-        // Initialize example tickets TODO replace with Firebase
-        tickets = Ticket.getTickets(100);
+    private void setupRecyclerView() {
+        Query query = ticketsRef.orderBy("date", Query.Direction.DESCENDING);
 
-        // Create adapter passing in the sample data
-        TicketsAdapter adapter = new TicketsAdapter(tickets);
+        // Recycler Options (How we get the query into the recycler adapter)
+        FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
+                .setQuery(query, Ticket.class)
+                .build();
 
-        // Attach the adapter to the recyclerview to populate items
-        rvTickets.setAdapter(adapter);
+        adapter = new TicketAdapter(options);
 
-        // Set layout manager to position the items
-        rvTickets.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     public void goToHome(View view){
@@ -55,9 +72,5 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void confirmPurchase(View view) {
-        setContentView(R.layout.confirm_purchase);
     }
 }

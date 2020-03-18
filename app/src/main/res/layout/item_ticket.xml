@@ -11,28 +11,28 @@
     <TextView
         android:id="@+id/tv_details_event"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         />
 
     <TextView
         android:id="@+id/tv_details_info"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         />
 
     <TextView
         android:id="@+id/tv_details_date"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:paddingLeft="10dp" />
 
     <TextView
         android:id="@+id/tv_details_price"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:paddingLeft="15dp" />
 
