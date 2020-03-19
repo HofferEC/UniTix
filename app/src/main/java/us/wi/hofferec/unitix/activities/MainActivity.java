@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private DocumentReference documentReference;
     private String COLLECTION = "users";
-    private final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private void getUserInformation(){
 
         // Set the location of where the users information is stored
-        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         documentReference = database.collection(COLLECTION).document(userUID);
 
@@ -51,13 +50,20 @@ public class MainActivity extends AppCompatActivity {
                         // Pull the data from the database
                         LoginActivity.user = document.toObject(User.class);
 
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        Log.d("MainActivity", "Retrieved data for user, " + userUID + ": " + document.getData());
                     }
                     else {
-                        Log.d(TAG, "No such document");
+                        Log.d("MainActivity", "Unable to find document for user: " + userUID + ", creating document now");
+
+                        // Create document for this user
+                        LoginActivity.user = new User(getIntent().getStringExtra("email"));
+
+                        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                        database.collection(COLLECTION).document(userUID).set(LoginActivity.user);
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.d("MainActivity", "accessing database failed with ", task.getException());
                 }
             }
         });

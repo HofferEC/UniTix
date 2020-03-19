@@ -67,7 +67,7 @@ public class TicketPostedActivity extends AppCompatActivity {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
 
                         // Add the new ticket number to the users database
-                        addTicketToUserDatabase(documentReference.getId());
+                        addTicketToUserDatabase(documentReference);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -78,14 +78,10 @@ public class TicketPostedActivity extends AppCompatActivity {
                 });
     }
 
-    private void addTicketToUserDatabase(String ticketId) {
+    private void addTicketToUserDatabase(DocumentReference documentReference) {
 
         // Add the ticket to the users profile
-        LoginActivity.user.addTicket(ticketId);
-
-        System.out.println(ticketId);
-
-        System.out.println(LoginActivity.user.getTickets());
+        LoginActivity.user.addTicket(documentReference);
 
         // Rewrite the user back to the database
         database.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getCurrentUser().getUid())

@@ -9,7 +9,6 @@ import java.util.Date;
 /**
  * Represents the data model for a ticket.
  */
-@SuppressWarnings("serial")
 public class Ticket implements Serializable {
 
     private String date;
@@ -28,10 +27,12 @@ public class Ticket implements Serializable {
     /**
      * Constructor.
      *
-     * @param date date to set
-     * @param homeTeam homeTeam to set
-     * @param awayTeam awayTeam to set
-     * @param event event to set
+     * @param date date of the event
+     * @param homeTeam home team
+     * @param awayTeam away team
+     * @param event event
+     * @param available is the ticket available
+     * @param price price
      */
     public Ticket(String date, String homeTeam, String awayTeam, String event, boolean available, String price) {
         this.date = date;
@@ -43,7 +44,7 @@ public class Ticket implements Serializable {
     }
 
     /**
-     * Getter for price
+     * Getter for price.
      *
      * @return current price
      */

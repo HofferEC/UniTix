@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -63,34 +64,36 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (password.isEmpty()) {
             passwordEditText.setError("Please enter a password");
             passwordEditText.requestFocus();
-        } else if (!(email.isEmpty() && password.isEmpty())) {
+        } else {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(!task.isSuccessful()) {
-                                Toast.makeText(SignUpActivity.this, "Sign up unsuccessful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("SignUpActivity.signUp()", "Unable create user given exception: " + task.getException());
                             } else {
+                                // Add new user to users database
                                 addUserToDatabase();
+
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
                         }
                     });
-        } else {
-            Toast.makeText(getApplicationContext(), "Error Occurred", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void addUserToDatabase(){
 
         // User to be created
-        User user = new User(emailEditText.getText().toString());
+        LoginActivity.user = new User(emailEditText.getText().toString());
+
+        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Get the users collection from database
-        database.collection(COLLECTION).document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .set(user);
+        database.collection(COLLECTION).document(userUID).set(LoginActivity.user);
 
     }
 
