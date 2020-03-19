@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import javax.xml.validation.Validator;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.data.Factory;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class TicketPostedActivity extends AppCompatActivity {
@@ -59,45 +60,8 @@ public class TicketPostedActivity extends AppCompatActivity {
         ticket.setPrice(bundle.getString("price"));
         ticket.setAvailable(bundle.getBoolean("available"));
 
-        database.collection(TICKETS_COLLECTION)
-                .add(ticket)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-
-                        // Add the new ticket number to the users database
-                        addTicketToUserDatabase(documentReference);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-    }
-
-    private void addTicketToUserDatabase(DocumentReference documentReference) {
-
-        // Add the ticket to the users profile
-        LoginActivity.user.addTicket(documentReference);
-
-        // Rewrite the user back to the database
-        database.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .set(LoginActivity.user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+        // Add the ticket to the tickets database as well as associate it with the user
+        Factory.addTicketToDatabaseAndUser("TicketPostedActivity", ticket);
     }
 
     public void goToHome(View view){

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,31 +14,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.data.User;
+import us.wi.hofferec.unitix.data.Factory;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private EditText emailEditText;
     private EditText passwordEditText;
+    private EditText emailEditText;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    public static User user;
-    private FirebaseFirestore database = FirebaseFirestore.getInstance();
-    private DocumentReference documentReference;
-    private String COLLECTION = "users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailEditText = findViewById(R.id.et_signup_email);
         passwordEditText = findViewById(R.id.et_signup_password);
+        emailEditText = findViewById(R.id.et_signup_email);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -49,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser mFireBaseUser = mAuth.getCurrentUser();
                 if (mFireBaseUser != null) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("email", mFireBaseUser.getEmail());
                     startActivity(intent);
                     finish();
                 }
@@ -93,8 +84,10 @@ public class LoginActivity extends AppCompatActivity {
                             if(!task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             } else {
-                                // User has been validated, so we can retrieve their information
-                                getUserInformation();
+                                // User has been validated, so we can retrieve their information from the database
+                                Factory.getUser().setEmail(emailEditText.getText().toString());
+
+                                Factory.getUserInformation();
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
@@ -103,41 +96,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
-
-    private void getUserInformation(){
-
-        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        // Set the location of where all users information is stored
-        documentReference = database.collection(COLLECTION).document(userUID);
-
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-
-                        // Map the data from the document to the user object
-                        user = document.toObject(User.class);
-
-                        Log.d("LoginActivity", "Retrieved data for user, " + userUID + ": " + document.getData());
-                    }
-                    else {
-                        Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
-
-                        // Create document for this user
-                        user = new User(emailEditText.getText().toString());
-
-                        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                        database.collection(COLLECTION).document(userUID).set(user);
-                    }
-                } else {
-                    Log.d("LoginActivity", "accessing database failed with ", task.getException());
-                }
-            }
-        });
     }
 }

@@ -18,6 +18,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.data.Factory;
 import us.wi.hofferec.unitix.data.User;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -74,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 Log.d("SignUpActivity.signUp()", "Unable create user given exception: " + task.getException());
                             } else {
                                 // Add new user to users database
-                                addUserToDatabase();
+                                Factory.getUserInformation();
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
@@ -84,17 +85,4 @@ public class SignUpActivity extends AppCompatActivity {
                     });
         }
     }
-
-    private void addUserToDatabase(){
-
-        // User to be created
-        LoginActivity.user = new User(emailEditText.getText().toString());
-
-        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        // Get the users collection from database
-        database.collection(COLLECTION).document(userUID).set(LoginActivity.user);
-
-    }
-
 }

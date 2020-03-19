@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.finish();
+        finish();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }

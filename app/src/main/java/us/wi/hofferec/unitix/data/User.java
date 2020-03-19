@@ -3,6 +3,7 @@ package us.wi.hofferec.unitix.data;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class User {
     private String email;
     private String username;
     private List<DocumentReference> tickets;
+    private HashMap<String, Object> settings;
     private String dateOfBirth;
     private String phone;
 
@@ -40,12 +42,44 @@ public class User {
      * @param phone phone
      * @param username username
      */
-    public User(String email, List<DocumentReference> tickets, String dateOfBirth, String phone, String username) {
+    public User(String email, List<DocumentReference> tickets, String dateOfBirth, String phone, String username, HashMap<String, Object> settings) {
         this.email = email;
         this.tickets = tickets;
         this.dateOfBirth = dateOfBirth;
         this.phone = phone;
         this.username = username;
+        this.settings = settings;
+    }
+
+    /**
+     * Getter for settings.
+     *
+     * @return current settings
+     */
+    public HashMap<String, Object> getSettings() {
+        return settings;
+    }
+
+    /**
+     * Setter for settings.
+     *
+     * @param settings settings to set
+     */
+    public void setSettings(HashMap<String, Object> settings) {
+        this.settings = settings;
+    }
+
+    /**
+     * Add a new setting to users settings
+     *
+     * @param setting name of the settings
+     * @param value value associated with the setting
+     */
+    public void addSetting(String setting, Object value) {
+        if (settings == null) {
+            settings = new HashMap<>();
+        }
+        settings.put(setting, value);
     }
 
     /**
