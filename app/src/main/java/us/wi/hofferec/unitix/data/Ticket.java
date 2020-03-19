@@ -17,7 +17,6 @@ public class Ticket implements Serializable {
     private String awayTeam;
     private String event;
     private String price;
-    private static int id;
     private boolean available;
 
     /**
@@ -41,7 +40,6 @@ public class Ticket implements Serializable {
         this.event = event;
         this.available = available;
         this.price = price;
-        id++;
     }
 
     /**
@@ -78,15 +76,6 @@ public class Ticket implements Serializable {
      */
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    /**
-     * Getter for id.
-     *
-     * @return current id
-     */
-    public static int getId() {
-        return id;
     }
 
     /**

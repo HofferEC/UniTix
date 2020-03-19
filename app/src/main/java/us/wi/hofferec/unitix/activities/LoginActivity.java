@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,8 +15,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.data.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +28,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    public static User user;
+    private FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private DocumentReference documentReference;
+    private String COLLECTION = "users";
+    private final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +90,8 @@ public class LoginActivity extends AppCompatActivity {
                             if(!task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Email or Password is incorrect", Toast.LENGTH_SHORT).show();
                             } else {
+                                getUserInformation();
+
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -89,10 +101,33 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Error Occurred", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    private void getUserInformation(){
 
+        // Set the location of where the users information is stored
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        documentReference = database.collection(COLLECTION).document(userUID);
 
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Pull the data from the database
+                        user = document.toObject(User.class);
 
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    }
+                    else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

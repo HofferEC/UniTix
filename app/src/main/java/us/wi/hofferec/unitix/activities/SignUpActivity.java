@@ -13,9 +13,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.data.User;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -23,6 +25,9 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
+    private FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private final String COLLECTION = "users";
+    private CollectionReference collectionReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if(!task.isSuccessful()) {
                                 Toast.makeText(SignUpActivity.this, "Sign up unsuccessful", Toast.LENGTH_SHORT).show();
                             } else {
+                                addUserToDatabase();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -76,4 +82,16 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error Occurred", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void addUserToDatabase(){
+
+        // User to be created
+        User user = new User(emailEditText.getText().toString());
+
+        // Get the users collection from database
+        database.collection(COLLECTION).document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .set(user);
+
+    }
+
 }
