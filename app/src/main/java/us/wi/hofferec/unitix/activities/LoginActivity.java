@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,11 +32,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static User user;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Get sharedPreferences
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        // Login with uid if user did not logout last time
+        String storedUid = sharedPreferences.getString("USER", null);
+        if (storedUid != null)
+            getUserFromDatabaseWithUid(storedUid);
 
         user = new User();
 
@@ -107,6 +117,69 @@ public class LoginActivity extends AppCompatActivity {
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
 
         final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        database.collection("users").document(userUID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+
+                                // Map the data from the document to the user object
+                                user = document.toObject(User.class);
+
+                                Log.d("LoginActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
+                            }
+                            else {
+                                Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
+
+                                // Get the current authenticated users email
+                                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+                                // Settings template
+                                HashMap<String, Object> settings = new HashMap<>();
+                                settings.put("darkMode", false);
+                                settings.put("notifications", false);
+                                settings.put("currency", "USD");
+
+                                // Create document for this user
+                                user = new User(email, settings);
+
+                                final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                database.collection("users").document(userUID).set(user);
+                            }
+
+                            // Apply custom user settings
+                            if(user.getSettings() != null)
+                                applyCustomUserSettings();
+
+                            // add user to SharedPreferences to persist login
+                            sharedPreferences.edit().putString("USER", userUID).apply();
+
+                            // Go to home screen, since all the information is loaded
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            Log.d("LoginActivity", "accessing database failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Retrieve the user information from the database before going to the main screen.
+     */
+    public void getUserFromDatabaseWithUid(String uid) {
+
+        // Database context
+        final FirebaseFirestore database = FirebaseFirestore.getInstance();
+
+        final String userUID = uid;
 
         database.collection("users").document(userUID)
                 .get()

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,11 +33,15 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private final String COLLECTION = "users";
     private CollectionReference collectionReference;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        // Get sharedPreferences
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
         emailEditText = findViewById(R.id.et_signup_email);
         passwordEditText = findViewById(R.id.et_signup_password);
@@ -119,6 +124,9 @@ public class SignUpActivity extends AppCompatActivity {
                             final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                             database.collection("users").document(userUID).set(LoginActivity.user);
+
+                            // add user to SharedPreferences to persist login
+                            sharedPreferences.edit().putString("USER", userUID).apply();
 
                             // Go to home screen, since all the information is loaded
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

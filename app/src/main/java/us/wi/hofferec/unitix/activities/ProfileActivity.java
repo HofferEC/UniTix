@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,11 +30,15 @@ import us.wi.hofferec.unitix.data.Utility;
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profileImage;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // Get sharedPreferences
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
         profileImage = findViewById(R.id.iv_profile_profile);
 
@@ -59,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void logout(View view){
+        sharedPreferences.edit().remove("USER").apply();
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);

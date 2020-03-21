@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.TicketPostedActivity"></activity>
+        <activity android:name=".activities.TicketPostedActivity" />
         <activity android:name=".activities.TicketPurchasedActivity" />
         <activity android:name=".activities.SellTicketActivity" />
         <activity android:name=".activities.TicketMarketplaceActivity" />
