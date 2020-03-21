@@ -5,27 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.data.Factory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseFirestore database = FirebaseFirestore.getInstance();
-    private DocumentReference documentReference;
-    private String COLLECTION = "users";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // This means somehow the user had previously logged in and their information was not loaded
-        Factory.getUserInformation();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Apply the users profile picture
+        setProfileImage();
     }
 
     public void openMarketplace(View view) {
@@ -44,5 +39,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Sets the users profile picture
+     */
+    public void setProfileImage(){
+        if (LoginActivity.user.getProfileImageUri() != null) {
+            // ImageView in your Activity
+            ImageView profileImage = findViewById(R.id.iv_profile_main);
+
+            // Download directly from StorageReference using Glide
+            // (See MyAppGlideModule for Loader registration)
+            Glide.with(this).load(LoginActivity.user.getProfileImageUri()).apply(RequestOptions.circleCropTransform()).into(profileImage);
+        }
     }
 }

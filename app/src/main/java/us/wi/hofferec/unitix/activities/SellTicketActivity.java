@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import us.wi.hofferec.unitix.R;
 
@@ -15,6 +19,8 @@ public class SellTicketActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_ticket);
+
+        setProfileImage();
     }
 
     public void goToHome(View view){
@@ -35,13 +41,14 @@ public class SellTicketActivity extends AppCompatActivity {
 
         EditText dateEditText = findViewById(R.id.et_sell_ticket_date);
         EditText eventEditText = findViewById(R.id.et_sell_ticket_event);
-        EditText teamsEditText = findViewById(R.id.et_sell_ticket_teams);
+        EditText homeTeamEditText = findViewById(R.id.et_sell_ticket_home_team);
+        EditText awayTeamEditText = findViewById(R.id.et_sell_ticket_away_Team);
         EditText priceEditText = findViewById(R.id.et_sell_ticket_price);
 
         bundle.putString("date", dateEditText.getText().toString());
         bundle.putString("event", eventEditText.getText().toString());
-        bundle.putString("homeTeam", teamsEditText.getText().toString().substring(0, teamsEditText.getText().toString().indexOf(",")));
-        bundle.putString("awayTeam", teamsEditText.getText().toString().substring(teamsEditText.getText().toString().indexOf(",") + 2));
+        bundle.putString("homeTeam", homeTeamEditText.getText().toString());
+        bundle.putString("awayTeam", awayTeamEditText.getText().toString());
         bundle.putString("price", priceEditText.getText().toString());
         bundle.putBoolean("available", true);
 
@@ -51,5 +58,19 @@ public class SellTicketActivity extends AppCompatActivity {
 
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Sets the users profile picture
+     */
+    public void setProfileImage(){
+        if (LoginActivity.user.getProfileImageUri() != null) {
+            // ImageView in your Activity
+            ImageView profileImage = findViewById(R.id.iv_profile_sell_ticket);
+
+            // Download directly from StorageReference using Glide
+            // (See MyAppGlideModule for Loader registration)
+            Glide.with(this).load(LoginActivity.user.getProfileImageUri()).apply(RequestOptions.circleCropTransform()).into(profileImage);
+        }
     }
 }

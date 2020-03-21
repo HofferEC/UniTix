@@ -3,7 +3,11 @@ package us.wi.hofferec.unitix.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import us.wi.hofferec.unitix.R;
@@ -35,9 +39,7 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
         finish();
     }
 
-    public void goToProfile(View view){
-        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-        startActivity(intent);
+    public void goBack(View view){
         finish();
     }
 

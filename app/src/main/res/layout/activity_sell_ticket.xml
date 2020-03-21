@@ -7,7 +7,7 @@
     tools:context=".activities.SellTicketActivity">
 
     <ImageView
-        android:id="@+id/iv_sell_ticket_profile"
+        android:id="@+id/iv_profile_sell_ticket"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/ic_profile" />
 
     <ImageView
-        android:id="@+id/iv_sell_ticket_home"
+        android:id="@+id/iv_home_sell_ticket"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
@@ -97,31 +97,58 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_sell_ticket_event" />
 
     <TextView
-        android:id="@+id/tv_sell_ticket_teams"
+        android:id="@+id/tv_sell_ticket_home_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Teams:"
+        android:text="Home Team:"
         android:textAppearance="@style/BasicText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_sell_ticket_event" />
 
     <EditText
-        android:id="@+id/et_sell_ticket_teams"
+        android:id="@+id/et_sell_ticket_home_team"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:hint="Wisconsin, Michigan"
+        android:hint="Wisconsin"
         android:ems="10"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sell_ticket_teams" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_sell_ticket_home_team" />
+
+    <TextView
+        android:id="@+id/tv_sell_ticket_away_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Away Team:"
+        android:textAppearance="@style/BasicText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_sell_ticket_home_team" />
+
+    <EditText
+        android:id="@+id/et_sell_ticket_away_Team"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="Michigan"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sell_ticket_away_team" />
 
 
     <TextView
@@ -134,7 +161,7 @@
         android:text="Price:"
         android:textAppearance="@style/BasicText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_sell_ticket_teams" />
+        app:layout_constraintTop_toBottomOf="@+id/et_sell_ticket_away_Team" />
 
     <EditText
         android:id="@+id/et_sell_ticket_price"

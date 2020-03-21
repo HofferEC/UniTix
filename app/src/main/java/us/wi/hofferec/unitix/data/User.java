@@ -17,6 +17,7 @@ public class User {
     private HashMap<String, Object> settings;
     private String dateOfBirth;
     private String phone;
+    private String profileImageUri;
 
     /**
      * Empty Constructor (Used for FireStore serialization).
@@ -29,8 +30,9 @@ public class User {
      *
      * @param email email
      */
-    public User(String email) {
+    public User(String email, HashMap<String, Object> settings) {
         this.email = email;
+        this.settings = settings;
     }
 
     /**
@@ -49,6 +51,24 @@ public class User {
         this.phone = phone;
         this.username = username;
         this.settings = settings;
+    }
+
+    /**
+     * Getter for profileImageUUID.
+     *
+     * @return current profileImageUUID
+     */
+    public String getProfileImageUri() {
+        return profileImageUri;
+    }
+
+    /**
+     * Setter for profileImageUUID.
+     *
+     * @param profileImageUri profileImageUUID to set
+     */
+    public void setProfileImageUri(String profileImageUri) {
+        this.profileImageUri = profileImageUri;
     }
 
     /**

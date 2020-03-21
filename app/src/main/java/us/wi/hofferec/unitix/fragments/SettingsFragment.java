@@ -1,17 +1,20 @@
 package us.wi.hofferec.unitix.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.activities.LoginActivity;
-import us.wi.hofferec.unitix.data.Factory;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -33,29 +36,34 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 boolean on = sharedPreferences.getBoolean("notificationsKey", false);
                 if (on) {
                     Toast.makeText(getActivity(), "Notifications enabled", Toast.LENGTH_SHORT).show();
-                    Factory.getUser().addSetting("notifications", true);
+                    LoginActivity.user.addSetting("notifications", true);
                 }
                 else {
                     Toast.makeText(getActivity(), "Notifications disabled", Toast.LENGTH_SHORT).show();
-                    Factory.getUser().addSetting("notifications", false);
+                    LoginActivity.user.addSetting("notifications", false);
                 }
                 break;
             case "darkModeEnabled":
                 on = sharedPreferences.getBoolean("darkModeEnabled", false);
                 if(on) {
-                    Toast.makeText(getActivity(), "Dark Theme enabled", Toast.LENGTH_SHORT).show();
+                    LoginActivity.user.addSetting("darkMode", true);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    Factory.getUser().addSetting("darkMode", true);
+                    Toast.makeText(getActivity(), "Dark Theme enabled", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getActivity(), "Dark Theme disabled", Toast.LENGTH_SHORT).show();
+                    LoginActivity.user.addSetting("darkMode", false);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    Factory.getUser().addSetting("darkMode", false);
+                    Toast.makeText(getActivity(), "Dark Theme disabled", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case "currency":
+                String currency = sharedPreferences.getString("currency", "");
+                LoginActivity.user.addSetting("currency", currency);
+                Toast.makeText(getActivity(), "Currency set to " + currency, Toast.LENGTH_SHORT).show();
         }
 
-        Factory.updateUserDatabase("SettingsFragment");
+        // Update users settings in the database
+        Utility.updateUserDatabase("SettingsFragment");
     }
 
     @Override

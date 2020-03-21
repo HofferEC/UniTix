@@ -1,30 +1,18 @@
 package us.wi.hofferec.unitix.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import javax.xml.validation.Validator;
-
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.data.Factory;
+import us.wi.hofferec.unitix.data.Utility;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class TicketPostedActivity extends AppCompatActivity {
@@ -37,10 +25,11 @@ public class TicketPostedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ticket_posted);
 
         addTicketToTicketDatabase();
 
-        setContentView(R.layout.activity_ticket_posted);
+        setProfileImage();
     }
 
     private void addTicketToTicketDatabase() {
@@ -61,7 +50,7 @@ public class TicketPostedActivity extends AppCompatActivity {
         ticket.setAvailable(bundle.getBoolean("available"));
 
         // Add the ticket to the tickets database as well as associate it with the user
-        Factory.addTicketToDatabaseAndUser("TicketPostedActivity", ticket);
+        Utility.addTicketToDatabaseAndUser("TicketPostedActivity", ticket);
     }
 
     public void goToHome(View view){
@@ -74,5 +63,18 @@ public class TicketPostedActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Sets the users profile picture
+     */
+    public void setProfileImage(){
+        if (LoginActivity.user.getProfileImageUri() != null) {
+            // ImageView in your Activity
+            ImageView profileImage = findViewById(R.id.iv_profile_ticket_posted);
+
+            // Download directly from StorageReference using Glide
+            // (See MyAppGlideModule for Loader registration)
+            Glide.with(this).load(LoginActivity.user.getProfileImageUri()).apply(RequestOptions.circleCropTransform()).into(profileImage);        }
     }
 }

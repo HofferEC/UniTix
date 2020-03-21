@@ -15,10 +15,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.data.Factory;
 import us.wi.hofferec.unitix.data.User;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -74,15 +76,60 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("SignUpActivity.signUp()", "Unable create user given exception: " + task.getException());
                             } else {
-                                // Add new user to users database
-                                Factory.getUserInformation();
 
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                // Add new user to users database
+                                addUserToDatabase();
                             }
                         }
                     });
         }
+    }
+
+    /**
+     * Retrieve the user information from the database before going to the main screen.
+     */
+    public void addUserToDatabase() {
+
+        // Database context
+        final FirebaseFirestore database = FirebaseFirestore.getInstance();
+
+        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        database.collection("users").document(userUID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            Log.d("SignUpActivity", "Creating document for user: " + userUID);
+
+                            // Get the current authenticated users email
+                            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+                            // Settings template
+                            HashMap<String, Object> settings = new HashMap<>();
+                            settings.put("darkMode", false);
+                            settings.put("notifications", false);
+                            settings.put("currency", "USD");
+
+                            // Create document for this user
+                            LoginActivity.user = new User(email, settings);
+
+                            final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                            database.collection("users").document(userUID).set(LoginActivity.user);
+
+                            // Go to home screen, since all the information is loaded
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                        else {
+                            Log.d("LoginActivity", "accessing database failed with ", task.getException());
+                        }
+                    }
+                });
     }
 }

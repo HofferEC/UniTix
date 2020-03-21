@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UniTix</string>
+    <string name="uploadProfilePicture">uploadProfilePicture</string>
 </resources>

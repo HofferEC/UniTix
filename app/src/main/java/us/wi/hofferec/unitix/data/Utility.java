@@ -1,31 +1,23 @@
 package us.wi.hofferec.unitix.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.UUID;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import us.wi.hofferec.unitix.activities.LoginActivity;
 
 /**
- * This class is used to obtain and use different instances for this user
+ * This class is used to obtain and use different instances for this user by abstracting away a lot
+ * of the confusing firebase logic.
  */
-public class Factory {
-
-    // Represents the current user logged in
-    private static User user;
+public class Utility {
 
     // Collection that stores our user information
     private static final String USERS_COLLECTION = "users";
@@ -34,7 +26,7 @@ public class Factory {
     private static final String TICKETS_COLLECTION = "tickets";
 
     /**
-     * Used to update the current authenticated user in the users database using the current user
+     * Updates the current authenticated user in the users database using the current user
      * object variables.
      *
      * @param TAG class associated with the update
@@ -46,23 +38,23 @@ public class Factory {
 
         // Rewrite the user back to the database
         database.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .set(user)
+                .set(LoginActivity.user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully updated database information for user: " + user.getEmail());
+                        Log.d(TAG, "Successfully updated database information for user: " + LoginActivity.user.getEmail());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating database information for user: " + user.getEmail(), e);
+                        Log.w(TAG, "Error updating database information for user: " + LoginActivity.user.getEmail(), e);
                     }
                 });
     }
 
     /**
-     * Used to update a ticket in the tickets database.
+     * Updates a ticket in the tickets database.
      *
      * @param TAG class associated with the update
      * @param ticket ticket to be updated
@@ -112,10 +104,10 @@ public class Factory {
                         updateTicketOnDatabase("Factory", ticket);
 
                         // Add the ticket to the current users profile
-                        user.addTicket(documentReference);
+                        LoginActivity.user.addTicket(documentReference);
 
                         // Call the method to update the user data on the database
-                        Factory.updateUserDatabase("TicketPostedActivity");
+                        Utility.updateUserDatabase("TicketPostedActivity");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -124,87 +116,5 @@ public class Factory {
                         Log.w(TAG, "Error adding ticket " + ticket.getUid() + " to database", e);
                     }
                 });
-    }
-
-    /**
-     * Retrieves an updated copy of the users information. If this is the first time we are
-     * retrieving a users information, it will create the user in the database.
-     */
-    public static void getUserInformation(){
-
-        // Database context
-        final FirebaseFirestore database = FirebaseFirestore.getInstance();
-
-        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        database.collection(USERS_COLLECTION).document(userUID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-
-                        // Map the data from the document to the user object
-                        user = document.toObject(User.class);
-
-                        Log.d("LoginActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
-                    }
-                    else {
-                        Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
-
-                        // Get the current authenticated users email
-                        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
-                        // Create document for this user
-                        user = new User(email);
-
-                        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                        database.collection(USERS_COLLECTION).document(userUID).set(user);
-                    }
-
-
-                    // Apply custom user settings
-                    if(user.getSettings() != null)
-                        applyCustomUserSettings();
-
-                } else {
-                    Log.d("LoginActivity", "accessing database failed with ", task.getException());
-                }
-            }
-        });
-    }
-
-    private static void applyCustomUserSettings(){
-
-        // Apply custom user settings
-        if (user.getSettings().get("darkMode") != null) {
-            if (((Boolean) user.getSettings().get("darkMode")))
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            else
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-    }
-
-    /**
-     * Getter for user.
-     *
-     * @return current user logged in
-     */
-    public static User getUser(){
-        if (user == null) {
-            setUser(new User());
-        }
-        return user;
-    }
-
-    /**
-     * Set the current user logged in
-     *
-     * @param user user currently logged in
-     */
-    public static void setUser(User user) {
-        Factory.user = user;
     }
 }
