@@ -35,13 +35,6 @@
             app:allowDividerAbove="true">
         </ListPreference>
 
-        <Preference
-            android:title="Change profile picture"
-            android:key="@string/uploadProfilePicture"
-            app:allowDividerAbove="true"
-            app:allowDividerBelow="true">
-        </Preference>
-
     </PreferenceCategory>
 
 </PreferenceScreen>

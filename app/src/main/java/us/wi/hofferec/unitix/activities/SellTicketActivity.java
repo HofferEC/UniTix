@@ -35,6 +35,11 @@ public class SellTicketActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * checks whether input is valid and then starts a new intent which contains all the
+     * data and passes that to TicketPostedActivity
+     * @param view
+     */
     public void postTicket(View view){
 
         Bundle bundle = new Bundle();
@@ -45,19 +50,43 @@ public class SellTicketActivity extends AppCompatActivity {
         EditText awayTeamEditText = findViewById(R.id.et_sell_ticket_away_Team);
         EditText priceEditText = findViewById(R.id.et_sell_ticket_price);
 
-        bundle.putString("date", dateEditText.getText().toString());
-        bundle.putString("event", eventEditText.getText().toString());
-        bundle.putString("homeTeam", homeTeamEditText.getText().toString());
-        bundle.putString("awayTeam", awayTeamEditText.getText().toString());
-        bundle.putString("price", priceEditText.getText().toString());
-        bundle.putBoolean("available", true);
+        String date = dateEditText.getText().toString();
+        String event = eventEditText.getText().toString();
+        String homeTeam = homeTeamEditText.getText().toString();
+        String awayTeam = awayTeamEditText.getText().toString();
+        String price = priceEditText.getText().toString();
 
-        Intent intent = new Intent(getApplicationContext(), TicketPostedActivity.class);
+        // check if all edit texts have input
+        if (date.isEmpty()) {
+            dateEditText.setError("Enter a date");
+            dateEditText.requestFocus();
+        } else if (event.isEmpty()) {
+            eventEditText.setError("Enter an event");
+            eventEditText.requestFocus();
+        } else if (homeTeam.isEmpty()) {
+            homeTeamEditText.setError("Enter a home team");
+            homeTeamEditText.requestFocus();
+        } else if (awayTeam.isEmpty()) {
+            awayTeamEditText.setError("Enter an away team");
+            awayTeamEditText.requestFocus();
+        } else if (price.isEmpty()) {
+            priceEditText.setError("Enter a price");
+            priceEditText.requestFocus();
+        } else {
+            bundle.putString("date", date);
+            bundle.putString("event", event);
+            bundle.putString("homeTeam", homeTeam);
+            bundle.putString("awayTeam", awayTeam);
+            bundle.putString("price", price);
+            bundle.putBoolean("available", true);
 
-        intent.putExtras(bundle);
+            Intent intent = new Intent(getApplicationContext(), TicketPostedActivity.class);
 
-        startActivity(intent);
-        finish();
+            intent.putExtras(bundle);
+
+            startActivity(intent);
+            finish();
+        }
     }
 
     /**
