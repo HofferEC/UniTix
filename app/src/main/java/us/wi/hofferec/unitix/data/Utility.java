@@ -99,8 +99,7 @@ public class Utility {
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "Successfully added ticket " + ticket.getUid() + " to database");
 
-                        // Add UID to ticket and update on database again TODO how do we only do this once?
-                        ticket.setUid(documentReference.getId());
+                        // Add UID to ticket and update on database again
                         updateTicketOnDatabase("Factory", ticket);
 
                         // Add the ticket to the current users profile
