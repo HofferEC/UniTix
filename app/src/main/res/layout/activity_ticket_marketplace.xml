@@ -51,7 +51,7 @@
         android:layout_marginRight="16dp"
         android:ems="10"
         android:hint="@android:string/search_go"
-        android:inputType="numberDecimal"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_ticket_header" />
 

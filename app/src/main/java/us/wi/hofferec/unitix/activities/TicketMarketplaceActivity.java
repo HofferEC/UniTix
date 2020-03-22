@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,9 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     private CollectionReference ticketsRef;
     private TicketAdapter adapter;
 
+    private String sortField;
+    private boolean ascending;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,30 +43,49 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
 
         ticketsRef = database.collection("tickets");
 
+        // Setup Textviews for filtering the tickets list
         findViewById(R.id.tv_marketplace_date).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 updateRecyclerView("date");
+                 sortRecyclerView("date");
              }
          });
         findViewById(R.id.tv_marketplace_event).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 updateRecyclerView("event");
+                 sortRecyclerView("event");
              }
          });
         findViewById(R.id.tv_marketplace_price).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 updateRecyclerView("price");
+                 sortRecyclerView("price");
              }
          });
         findViewById(R.id.tv_marketplace_teams).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 updateRecyclerView("homeTeam");
+                 sortRecyclerView("homeTeam");
              }
          });
 
+        // Setup the search box for filtering the tickets list
+        final EditText et_search = findViewById(R.id.et_find_ticket_search);
+        et_search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+              // When focus is lost check that the text field has valid values.
+              if (!hasFocus) {
+                 String filterText = et_search.getText().toString();
+                 if (!filterText.isEmpty())
+                    filterRecyclerView(filterText);
+              }
+            }
+         });
+
+        sortField = "date";
+        ascending = true;
         setupRecyclerView();
     }
 
+    // Initial setup for recyclerview. Defaults to sort by date.
     private void setupRecyclerView() {
         Query query = ticketsRef.orderBy("date", Query.Direction.ASCENDING);
 
@@ -80,9 +103,30 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void updateRecyclerView(String sortField) {
-        Log.i("Marketplace", "Sorting marketplace by " + sortField);
-        Query query = ticketsRef.orderBy(sortField, Query.Direction.ASCENDING);
+    // Sorts the recyclerview, flips ascending or descending
+    private void sortRecyclerView(String newSortField) {
+        if (newSortField.equals(sortField)) {
+            ascending = !ascending;
+        } else {
+            ascending = false;
+        }
+        sortField = newSortField;
+        Log.i("Marketplace", "Sorting marketplace by " + sortField + ", " + (ascending ? "ascending" : "descending"));
+        Query query = ticketsRef.orderBy(newSortField, ascending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING);
+
+        // Recycler Options (How we get the query into the recycler adapter)
+        FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
+                .setQuery(query, Ticket.class)
+                .build();
+
+        adapter.updateOptions(options);
+        adapter.notifyDataSetChanged();
+    }
+
+    // Filters the recyclerview by the defined text. Keeps the same sorting.
+    private void filterRecyclerView(String filterText) {
+        Log.i("Marketplace", "Filtering marketplace for " + filterText);
+        Query query = ticketsRef.whereEqualTo(sortField, filterText).orderBy(sortField, ascending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING);
 
         // Recycler Options (How we get the query into the recycler adapter)
         FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
