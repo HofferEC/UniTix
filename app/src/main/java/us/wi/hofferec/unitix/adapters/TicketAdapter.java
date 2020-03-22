@@ -77,7 +77,6 @@ public class TicketAdapter extends FirestoreRecyclerAdapter<Ticket, TicketAdapte
                 Intent intent = new Intent(view.getContext(), ConfirmPurchaseActivity.class);
                 intent.putExtra("ticket", ticket);
                 view.getContext().startActivity(intent);
-
             }
         });
     }

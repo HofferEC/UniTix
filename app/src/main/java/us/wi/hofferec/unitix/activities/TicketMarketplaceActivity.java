@@ -2,6 +2,7 @@ package us.wi.hofferec.unitix.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -38,11 +39,32 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
 
         ticketsRef = database.collection("tickets");
 
+        findViewById(R.id.tv_marketplace_date).setOnClickListener(new View.OnClickListener() {
+             public void onClick(View v) {
+                 updateRecyclerView("date");
+             }
+         });
+        findViewById(R.id.tv_marketplace_event).setOnClickListener(new View.OnClickListener() {
+             public void onClick(View v) {
+                 updateRecyclerView("event");
+             }
+         });
+        findViewById(R.id.tv_marketplace_price).setOnClickListener(new View.OnClickListener() {
+             public void onClick(View v) {
+                 updateRecyclerView("price");
+             }
+         });
+        findViewById(R.id.tv_marketplace_teams).setOnClickListener(new View.OnClickListener() {
+             public void onClick(View v) {
+                 updateRecyclerView("homeTeam");
+             }
+         });
+
         setupRecyclerView();
     }
 
     private void setupRecyclerView() {
-        Query query = ticketsRef.orderBy("date", Query.Direction.DESCENDING);
+        Query query = ticketsRef.orderBy("date", Query.Direction.ASCENDING);
 
         // Recycler Options (How we get the query into the recycler adapter)
         FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
@@ -56,6 +78,19 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void updateRecyclerView(String sortField) {
+        Log.i("Marketplace", "Sorting marketplace by " + sortField);
+        Query query = ticketsRef.orderBy(sortField, Query.Direction.ASCENDING);
+
+        // Recycler Options (How we get the query into the recycler adapter)
+        FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
+                .setQuery(query, Ticket.class)
+                .build();
+
+        adapter.updateOptions(options);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

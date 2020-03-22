@@ -81,6 +81,7 @@
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
+            android:id="@+id/tv_marketplace_event"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -89,6 +90,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_marketplace_teams"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -97,6 +99,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_marketplace_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -105,6 +108,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_marketplace_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
