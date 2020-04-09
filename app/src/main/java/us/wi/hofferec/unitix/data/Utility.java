@@ -97,9 +97,12 @@ public class Utility {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Successfully added ticket " + ticket.getUid() + " to database");
+                        Log.d(TAG, "Successfully added ticket " + documentReference.getId() + " to database");
 
-                        // Add UID to ticket and update on database again
+                        // Assign UID to ticket
+                        ticket.setUid(documentReference.getId());
+
+                        // Update ticket on database with UID
                         updateTicketOnDatabase("Factory", ticket);
 
                         // Add the ticket to the current users profile
@@ -112,7 +115,7 @@ public class Utility {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding ticket " + ticket.getUid() + " to database", e);
+                        Log.w(TAG, "Error adding ticket to database", e);
                     }
                 });
     }
