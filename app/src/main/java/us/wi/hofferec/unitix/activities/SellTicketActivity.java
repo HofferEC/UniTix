@@ -25,14 +25,13 @@ public class SellTicketActivity extends AppCompatActivity {
 
     public void goToHome(View view){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
     }
 
     public void goToProfile(View view){
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
-        finish();
     }
 
     /**
@@ -85,6 +84,7 @@ public class SellTicketActivity extends AppCompatActivity {
             intent.putExtras(bundle);
 
             startActivity(intent);
+
             finish();
         }
     }

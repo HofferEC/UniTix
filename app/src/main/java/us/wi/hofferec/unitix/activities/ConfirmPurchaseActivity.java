@@ -35,11 +35,11 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
 
     public void goToHome(View view){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
     }
 
-    public void goBack(View view){
+    public void cancel(View view){
         finish();
     }
 
@@ -47,12 +47,5 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), TicketPurchasedActivity.class);
         intent.putExtra("ticket", ticket);
         startActivity(intent);
-        finish();
-    }
-
-    public void returnToMarketplace(View view) {
-        Intent intent = new Intent(getApplicationContext(), TicketMarketplaceActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

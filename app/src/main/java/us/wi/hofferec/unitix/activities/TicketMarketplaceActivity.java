@@ -150,15 +150,12 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     }
 
     public void goToHome(View view){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
         finish();
     }
 
     public void goToProfile(View view){
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
-        finish();
     }
 
     /**

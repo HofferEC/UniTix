@@ -161,8 +161,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             // Go to home screen, since all the information is loaded
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
-                            finish();
 
                         } else {
                             Log.d("LoginActivity", "accessing database failed with ", task.getException());
@@ -221,8 +221,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             // Go to home screen, since all the information is loaded
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
-                            finish();
 
                         } else {
                             Log.d("LoginActivity", "accessing database failed with ", task.getException());

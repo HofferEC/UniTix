@@ -22,8 +22,6 @@ public class TicketPurchasedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_purchased);
 
-        setProfileImage();
-
         Intent intent = getIntent();
         ticket = (Ticket) intent.getSerializableExtra("ticket");
 
@@ -37,26 +35,8 @@ public class TicketPurchasedActivity extends AppCompatActivity {
 
     public void goToHome(View view){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
-    }
-
-    public void goToProfile(View view){
-        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    /**
-     * Sets the users profile picture
-     */
-    public void setProfileImage(){
-        if (LoginActivity.user.getProfileImageUri() != null) {
-            // ImageView in your Activity
-            ImageView profileImage = findViewById(R.id.iv_profile_ticket_purchased);
-
-            // Download directly from StorageReference using Glide
-            // (See MyAppGlideModule for Loader registration)
-            Glide.with(this).load(LoginActivity.user.getProfileImageUri()).apply(RequestOptions.circleCropTransform()).into(profileImage);        }
     }
 }

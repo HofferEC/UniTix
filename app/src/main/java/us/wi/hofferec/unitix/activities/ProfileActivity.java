@@ -59,16 +59,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void goToHome(View view){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
     }
 
     public void logout(View view){
         sharedPreferences.edit().remove("USER").apply();
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
     }
 
     public void openSettingsFragment(View view) {

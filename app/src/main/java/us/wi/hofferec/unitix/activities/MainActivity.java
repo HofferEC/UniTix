@@ -26,19 +26,16 @@ public class MainActivity extends AppCompatActivity {
     public void openMarketplace(View view) {
         Intent intent = new Intent(getApplicationContext(), TicketMarketplaceActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void sellTicket(View view) {
         Intent intent = new Intent(getApplicationContext(), SellTicketActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void goToProfile(View view){
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
-        finish();
     }
 
     /**
