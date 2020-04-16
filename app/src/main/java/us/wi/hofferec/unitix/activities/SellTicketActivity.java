@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.helpers.Validation;
 
 public class SellTicketActivity extends AppCompatActivity {
 
@@ -55,23 +56,9 @@ public class SellTicketActivity extends AppCompatActivity {
         String awayTeam = awayTeamEditText.getText().toString();
         String price = priceEditText.getText().toString();
 
-        // check if all edit texts have input
-        if (date.isEmpty()) {
-            dateEditText.setError("Enter a date");
-            dateEditText.requestFocus();
-        } else if (event.isEmpty()) {
-            eventEditText.setError("Enter an event");
-            eventEditText.requestFocus();
-        } else if (homeTeam.isEmpty()) {
-            homeTeamEditText.setError("Enter a home team");
-            homeTeamEditText.requestFocus();
-        } else if (awayTeam.isEmpty()) {
-            awayTeamEditText.setError("Enter an away team");
-            awayTeamEditText.requestFocus();
-        } else if (price.isEmpty()) {
-            priceEditText.setError("Enter a price");
-            priceEditText.requestFocus();
-        } else {
+        // Validate the input of the ticket fields, then post ticket.
+        if (Validation.validateTicket(getApplicationContext(),
+                date, event, homeTeam, awayTeam, price)) {
             bundle.putString("date", date);
             bundle.putString("event", event);
             bundle.putString("homeTeam", homeTeam);
@@ -79,6 +66,7 @@ public class SellTicketActivity extends AppCompatActivity {
             bundle.putString("price", price);
             bundle.putBoolean("available", true);
 
+            // Note: Ticket is posted within onCreate of TicketPostedActivity
             Intent intent = new Intent(getApplicationContext(), TicketPostedActivity.class);
 
             intent.putExtras(bundle);
