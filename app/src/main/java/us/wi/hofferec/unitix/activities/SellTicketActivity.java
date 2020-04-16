@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.helpers.Configs;
 import us.wi.hofferec.unitix.helpers.Validation;
 
 public class SellTicketActivity extends AppCompatActivity {
@@ -20,6 +23,13 @@ public class SellTicketActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_ticket);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+            this, android.R.layout.simple_spinner_item, Configs.eventTypes);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner eventSpinner = findViewById(R.id.spinner_sell_ticket_event);
+        eventSpinner.setAdapter(adapter);
 
         setProfileImage();
     }
@@ -45,13 +55,13 @@ public class SellTicketActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
 
         EditText dateEditText = findViewById(R.id.et_sell_ticket_date);
-        EditText eventEditText = findViewById(R.id.et_sell_ticket_event);
+        Spinner eventSpinner = findViewById(R.id.spinner_sell_ticket_event);
         EditText homeTeamEditText = findViewById(R.id.et_sell_ticket_home_team);
         EditText awayTeamEditText = findViewById(R.id.et_sell_ticket_away_Team);
         EditText priceEditText = findViewById(R.id.et_sell_ticket_price);
 
         String date = dateEditText.getText().toString();
-        String event = eventEditText.getText().toString();
+        String event = eventSpinner.getSelectedItem().toString();
         String homeTeam = homeTeamEditText.getText().toString();
         String awayTeam = awayTeamEditText.getText().toString();
         String price = priceEditText.getText().toString();

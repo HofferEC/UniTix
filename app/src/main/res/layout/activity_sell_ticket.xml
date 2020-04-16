@@ -103,7 +103,7 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Date:"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/SubHeader" />
 
             <EditText
                 android:id="@+id/et_sell_ticket_date"
@@ -118,7 +118,8 @@
                 android:layout_marginBottom="0dp"
                 android:ems="10"
                 android:hint="dd/mm/yyyy"
-                android:inputType="date" />
+                android:inputType="date"
+                android:textAppearance="@style/BasicText" />
 
             <TextView
                 android:id="@+id/tv_sell_ticket_event"
@@ -130,22 +131,15 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Event:"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/SubHeader" />
 
-            <EditText
-                android:id="@+id/et_sell_ticket_event"
+            <Spinner
+                android:id="@+id/spinner_sell_ticket_event"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="0dp"
-                android:ems="10"
-                android:hint="Basketball"
-                android:inputType="text" />
+                android:paddingTop="16sp"
+                android:paddingBottom="8sp"
+                android:textAppearance="@style/BasicText" />
 
             <TextView
                 android:id="@+id/tv_sell_ticket_home_team"
@@ -157,7 +151,7 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Home Team:"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/SubHeader" />
 
             <EditText
                 android:id="@+id/et_sell_ticket_home_team"
@@ -172,6 +166,7 @@
                 android:layout_marginBottom="0dp"
                 android:ems="10"
                 android:hint="Wisconsin"
+                android:textAppearance="@style/BasicText"
                 android:inputType="text" />
 
             <TextView
@@ -184,7 +179,7 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Away Team:"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/SubHeader" />
 
             <EditText
                 android:id="@+id/et_sell_ticket_away_Team"
@@ -199,7 +194,8 @@
                 android:layout_marginBottom="0dp"
                 android:ems="10"
                 android:hint="Michigan"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textAppearance="@style/BasicText" />
 
             <TextView
                 android:id="@+id/tv_sell_ticket_price"
@@ -211,7 +207,7 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Price:"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/SubHeader" />
 
             <EditText
                 android:id="@+id/et_sell_ticket_price"
@@ -226,7 +222,9 @@
                 android:layout_marginBottom="0dp"
                 android:ems="10"
                 android:hint="10.52"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textAppearance="@style/BasicText" />
+
         </LinearLayout>
     </ScrollView>
 
