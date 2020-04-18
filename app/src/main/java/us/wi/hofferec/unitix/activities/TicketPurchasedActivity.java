@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions;
 import androidx.appcompat.app.AppCompatActivity;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.Ticket;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class TicketPurchasedActivity extends AppCompatActivity {
 
@@ -24,6 +25,9 @@ public class TicketPurchasedActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ticket = (Ticket) intent.getSerializableExtra("ticket");
+
+        ticket.setAvailable(false);
+        Utility.updateTicketOnDatabase("TicketPurchasedActivity", ticket);
 
         TextView ticketInfo = (TextView) findViewById(R.id.ticketInfoTextView);
 

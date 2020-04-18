@@ -1,17 +1,22 @@
 package us.wi.hofferec.unitix.data;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import us.wi.hofferec.unitix.activities.LoginActivity;
+import us.wi.hofferec.unitix.helpers.Notifications;
 
 /**
  * This class is used to obtain and use different instances for this user by abstracting away a lot
@@ -118,5 +123,45 @@ public class Utility {
                         Log.w(TAG, "Error adding ticket to database", e);
                     }
                 });
+    }
+
+    public static void checkForSoldTickets(final Context context, final String TAG, User user){
+        final List<DocumentReference> tickets = user.getTickets();
+        final ArrayList<Task> taskList = new ArrayList<>();
+        for (int i = 0; i < tickets.size(); i++) {
+            try {
+                final int finalI = i;
+                final Task task = tickets.get(i).get().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        Ticket t = snapshot.toObject(Ticket.class);
+                        Log.i(TAG, "Checking if a ticket was sold: " + t.getUid());
+                        Log.i(TAG, "Away Team: " + t.getAwayTeam() + "\n" +
+                                "Home Team: " + t.getHomeTeam() + "\n" +
+                                "Date: " + t.getDate() + "\n" +
+                                "Event: " + t.getEvent() + "\n" +
+                                "Price: " + t.getPrice() + "\n" +
+                                "Available: " + t.isAvailable() + "\n" +
+                                "Seen: " + t.isSeen());
+                        if (t == null) {
+                            Log.e(TAG, "Missing ticket document: " + tickets.get(finalI).getId());
+                            return;
+                        }
+                        if (!t.isAvailable() && !t.isSeen()) {
+                            Notifications.notifyTicketIsSold(context, t);
+                        }
+                    }
+                });
+                task.wait();
+            } catch (Exception e) {
+                Log.e(TAG, "Error deserializing document result to Ticket: " + tickets.get(i).getId()
+                        + "\n" + e.getMessage());
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Apply the users profile picture
         setProfileImage();
+
+        // Check if the user's tickets have been sold. If so, sends notification.
+        if ((boolean) LoginActivity.user.getSettings().get("notifications"))
+            Utility.checkForSoldTickets(getApplicationContext(), "MainActivity", LoginActivity.user);
     }
 
     public void openMarketplace(View view) {

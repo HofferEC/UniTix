@@ -9,18 +9,12 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.Utility;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class TicketPostedActivity extends AppCompatActivity {
-
-    private FirebaseFirestore database = FirebaseFirestore.getInstance();
-    private final String TICKETS_COLLECTION = "tickets";
-    private final String USERS_COLLECTION = "users";
-    private final String TAG = "TicketPostedActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +47,13 @@ public class TicketPostedActivity extends AppCompatActivity {
         Utility.addTicketToDatabaseAndUser("TicketPostedActivity", ticket);
     }
 
-    public void goToHome(View view){
+    public void goToHome(View view) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
-    public void goToProfile(View view){
+    public void goToProfile(View view) {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
     }
@@ -67,7 +61,7 @@ public class TicketPostedActivity extends AppCompatActivity {
     /**
      * Sets the users profile picture
      */
-    public void setProfileImage(){
+    public void setProfileImage() {
         if (LoginActivity.user.getProfileImageUri() != null) {
             // ImageView in your Activity
             ImageView profileImage = findViewById(R.id.iv_profile_ticket_posted);
