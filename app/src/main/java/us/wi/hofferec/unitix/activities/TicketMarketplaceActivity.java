@@ -87,7 +87,7 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
 
     // Initial setup for recyclerview. Defaults to sort by date.
     private void setupRecyclerView() {
-        Query query = ticketsRef.orderBy("date", Query.Direction.ASCENDING);
+        Query query = ticketsRef.whereEqualTo("available", true).orderBy("date", Query.Direction.ASCENDING);
 
         // Recycler Options (How we get the query into the recycler adapter)
         FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
