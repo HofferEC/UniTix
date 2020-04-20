@@ -44,7 +44,7 @@ public class TicketPostedActivity extends AppCompatActivity {
         ticket.setAvailable(bundle.getBoolean("available"));
 
         // Add the ticket to the tickets database as well as associate it with the user
-        Utility.addTicketToDatabaseAndUser("TicketPostedActivity", ticket);
+        Utility.addTicketToDatabaseAndUser("TicketPostedActivity", ticket, "selling");
     }
 
     public void goToHome(View view) {

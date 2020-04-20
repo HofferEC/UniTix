@@ -46,11 +46,11 @@ public class LoginActivity extends AppCompatActivity {
         String storedUid = sharedPreferences.getString("USER", null);
         if (storedUid != null)
             getUserFromDatabaseWithUid(storedUid);
-
-        user = new User();
-
-        passwordEditText = findViewById(R.id.et_signup_password);
-        emailEditText = findViewById(R.id.et_signup_email);
+        else {
+            user = new User();
+            passwordEditText = findViewById(R.id.et_signup_password);
+            emailEditText = findViewById(R.id.et_signup_email);
+        }
 
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {

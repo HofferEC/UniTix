@@ -93,44 +93,52 @@ public class Utility {
      * @param TAG class associated with the update
      * @param ticket ticket to be added
      */
-    public static void addTicketToDatabaseAndUser(final String TAG, final Ticket ticket) {
+    public static void addTicketToDatabaseAndUser(final String TAG, final Ticket ticket, final String type) {
 
         FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-        database.collection(TICKETS_COLLECTION)
-                .add(ticket)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Successfully added ticket " + documentReference.getId() + " to database");
+        if (type.equals("selling")) {
+            database.collection(TICKETS_COLLECTION)
+                    .add(ticket)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "Successfully added ticket " + documentReference.getId() + " to database");
 
-                        // Assign UID to ticket
-                        ticket.setUid(documentReference.getId());
+                            // Assign UID to ticket
+                            ticket.setUid(documentReference.getId());
 
-                        // Update ticket on database with UID
-                        updateTicketOnDatabase("Factory", ticket);
+                            // Update ticket on database with UID
+                            updateTicketOnDatabase("Factory", ticket);
 
-                        // Add the ticket to the current users profile
-                        LoginActivity.user.addTicket(documentReference);
+                            // Add the ticket to the current users profile (Selling)
+                            LoginActivity.user.addTicketToSelling(documentReference);
 
-                        // Call the method to update the user data on the database
-                        Utility.updateUserDatabase("TicketPostedActivity");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding ticket to database", e);
-                    }
-                });
+                            // Call the method to update the user data on the database
+                            Utility.updateUserDatabase("TicketPostedActivity");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding ticket to database", e);
+                        }
+                    });
+        }
+        else if (type.equals("buying")) {
+            LoginActivity.user.addTicketToBuying(database.collection(TICKETS_COLLECTION).document(ticket.getUid()));
+
+            Utility.updateUserDatabase("TicketPostedActivity");
+        }
+
     }
 
     public static void checkForSoldTickets(final Context context, final String TAG, User user){
-        final List<DocumentReference> tickets = user.getTickets();
+        final List<DocumentReference> ticketsSelling = user.getTicketsSelling();
 
-        for (int i = 0; i < tickets.size(); i++) {
+        for (int i = 0; i < ticketsSelling.size(); i++) {
             try {
-                final Task task = tickets.get(i).get().addOnFailureListener(new OnFailureListener() {
+                final Task task = ticketsSelling.get(i).get().addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, e.getMessage());
@@ -148,7 +156,7 @@ public class Utility {
                 });
                 task.wait();
             } catch (Exception e) {
-                Log.e(TAG, "Error deserializing document result to Ticket: " + tickets.get(i).getId()
+                Log.e(TAG, "Error deserializing document result to Ticket: " + ticketsSelling.get(i).getId()
                         + "\n" + e.getMessage());
             }
         }

@@ -71,6 +71,11 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openSelling(View view){
+        Intent intent = new Intent(getApplicationContext(), ProfileSellingActivity.class);
+        startActivity(intent);
+    }
+
     public void openSettingsFragment(View view) {
         Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(intent);

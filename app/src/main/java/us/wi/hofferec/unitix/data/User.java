@@ -13,7 +13,8 @@ public class User {
 
     private String email;
     private String username;
-    private List<DocumentReference> tickets;
+    private List<DocumentReference> ticketsSelling;
+    private List<DocumentReference> ticketsBuying;
     private HashMap<String, Object> settings;
     private String dateOfBirth;
     private String phone;
@@ -37,16 +38,17 @@ public class User {
 
     /**
      * Constructor.
-     *
-     * @param email email
-     * @param tickets associated tickets
+     *  @param email email
+     * @param ticketsSelling tickets being sold
+     * @param ticketsBuying tickets being bought
      * @param dateOfBirth date of birth
      * @param phone phone
      * @param username username
      */
-    public User(String email, List<DocumentReference> tickets, String dateOfBirth, String phone, String username, HashMap<String, Object> settings) {
+    public User(String email, List<DocumentReference> ticketsSelling, List<DocumentReference> ticketsBuying, String dateOfBirth, String phone, String username, HashMap<String, Object> settings) {
         this.email = email;
-        this.tickets = tickets;
+        this.ticketsSelling = ticketsSelling;
+        this.ticketsBuying = ticketsBuying;
         this.dateOfBirth = dateOfBirth;
         this.phone = phone;
         this.username = username;
@@ -139,33 +141,73 @@ public class User {
     }
 
     /**
-     * Getter for tickets.
+     * Getter for ticketsBuying.
      *
-     * @return current tickets
+     * @return current ticketsBuying
      */
-    public List<DocumentReference> getTickets() {
-        return tickets;
+    public List<DocumentReference> getTicketsBuying() {
+        if (ticketsBuying == null)
+            ticketsBuying = new ArrayList<>();
+        return ticketsBuying;
     }
 
     /**
-     * Setter for tickets.
+     * Setter for ticketBuying.
      *
-     * @param tickets tickets to set
+     * @param ticketsBuying ticketsBuying to set
      */
-    public void setTickets(List<DocumentReference> tickets) {
-        this.tickets = tickets;
+    public void setTicketsBuying(List<DocumentReference> ticketsBuying) {
+        if (ticketsBuying == null) {
+            ticketsBuying = new ArrayList<>();
+        }
+        this.ticketsBuying = ticketsBuying;
     }
 
     /**
-     * Add a ticket to this users history.
+     * Getter for ticketsSelling.
+     *
+     * @return current ticketsSelling
+     */
+    public List<DocumentReference> getTicketsSelling() {
+        if (ticketsSelling == null)
+            ticketsSelling = new ArrayList<>();
+
+        return ticketsSelling;
+    }
+
+    /**
+     * Setter for ticketsSelling.
+     *
+     * @param ticketsSelling ticketsSelling to set
+     */
+    public void setTicketsSelling(List<DocumentReference> ticketsSelling) {
+        if (ticketsSelling == null)
+            ticketsSelling = new ArrayList<>();
+        this.ticketsSelling = ticketsSelling;
+    }
+
+    /**
+     * Add a ticket to this users selling history.
      *
      * @param documentReference document reference of ticket
      */
-    public void addTicket(DocumentReference documentReference) {
-        if(tickets == null) {
-            tickets = new ArrayList<>();
+    public void addTicketToSelling(DocumentReference documentReference) {
+        if(ticketsSelling == null) {
+            ticketsSelling = new ArrayList<>();
         }
-        tickets.add(documentReference);
+        ticketsSelling.add(documentReference);
+    }
+
+    /**
+     * Add a ticket to this users buying history.
+     *
+     * @param documentReference document reference of ticket
+     */
+    public void addTicketToBuying(DocumentReference documentReference) {
+        if(ticketsBuying == null) {
+            ticketsBuying = new ArrayList<>();
+        }
+        ticketsBuying.add(documentReference);
     }
 
     /**
