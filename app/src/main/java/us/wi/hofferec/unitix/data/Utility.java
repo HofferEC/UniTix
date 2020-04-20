@@ -127,10 +127,9 @@ public class Utility {
 
     public static void checkForSoldTickets(final Context context, final String TAG, User user){
         final List<DocumentReference> tickets = user.getTickets();
-        final ArrayList<Task> taskList = new ArrayList<>();
+
         for (int i = 0; i < tickets.size(); i++) {
             try {
-                final int finalI = i;
                 final Task task = tickets.get(i).get().addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -139,21 +138,11 @@ public class Utility {
                 }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot snapshot) {
-                        Ticket t = snapshot.toObject(Ticket.class);
-                        Log.i(TAG, "Checking if a ticket was sold: " + t.getUid());
-                        Log.i(TAG, "Away Team: " + t.getAwayTeam() + "\n" +
-                                "Home Team: " + t.getHomeTeam() + "\n" +
-                                "Date: " + t.getDate() + "\n" +
-                                "Event: " + t.getEvent() + "\n" +
-                                "Price: " + t.getPrice() + "\n" +
-                                "Available: " + t.isAvailable() + "\n" +
-                                "Seen: " + t.isSeen());
-                        if (t == null) {
-                            Log.e(TAG, "Missing ticket document: " + tickets.get(finalI).getId());
-                            return;
-                        }
-                        if (!t.isAvailable() && !t.isSeen()) {
-                            Notifications.notifyTicketIsSold(context, t);
+
+                        Ticket ticket = snapshot.toObject(Ticket.class);
+
+                        if (!ticket.isAvailable() && (Boolean)LoginActivity.user.getSettings().get("notifications")) {
+                            Notifications.notifyTicketIsSold(context, ticket);
                         }
                     }
                 });
