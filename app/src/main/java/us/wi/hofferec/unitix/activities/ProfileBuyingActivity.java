@@ -26,7 +26,7 @@ import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.adapters.ProfileTicketsSellingAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
 
-public class ProfileSellingActivity extends AppCompatActivity {
+public class ProfileBuyingActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ProfileTicketsSellingAdapter adapter;
@@ -36,7 +36,7 @@ public class ProfileSellingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_selling);
+        setContentView(R.layout.activity_profile_buying);
 
         setupRecyclerView();
     }
@@ -50,7 +50,7 @@ public class ProfileSellingActivity extends AppCompatActivity {
         // Save the data
         final List<Ticket> data = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.rv_profile_selling);
+        recyclerView = findViewById(R.id.rv_profile_buying);
 
         recyclerView.setHasFixedSize(true);
 
@@ -65,7 +65,7 @@ public class ProfileSellingActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            List<DocumentReference> list = (List<DocumentReference>) document.get("ticketsSelling");
+                            List<DocumentReference> list = (List<DocumentReference>) document.get("ticketsBuying");
                             List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
                             for (DocumentReference documentReference : list) {
                                 Task<DocumentSnapshot> documentSnapshotTask = documentReference.get();
@@ -80,7 +80,7 @@ public class ProfileSellingActivity extends AppCompatActivity {
                                         Ticket ticket = ((DocumentSnapshot) object).toObject(Ticket.class);
                                         data.add(ticket);
                                     }
-                                    Log.i("ProfileSellingActivity", "Successfully loaded " + list.size() + " ticket for user: " + firebaseUser.getUid());
+                                    Log.i("ProfileBuyingActivity", "Successfully loaded " + list.size() + " ticket for user: " + firebaseUser.getUid());
 
                                     adapter = new ProfileTicketsSellingAdapter(data);
                                     recyclerView.setAdapter(adapter);

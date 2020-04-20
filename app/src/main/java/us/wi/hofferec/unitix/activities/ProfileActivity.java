@@ -76,6 +76,11 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openBuying(View view) {
+        Intent intent = new Intent(getApplicationContext(), ProfileBuyingActivity.class);
+        startActivity(intent);
+    }
+
     public void openSettingsFragment(View view) {
         Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(intent);

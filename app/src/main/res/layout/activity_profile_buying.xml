@@ -7,31 +7,31 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv_profile_selling_header"
+        android:id="@+id/tv_profile_buying_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Selling"
+        android:text="Buying"
         android:textAppearance="@style/SubHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_profile_selling_home"
+        android:id="@+id/iv_profile_buying_home"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:background="#00000000"
         android:onClick="goBack"
-        app:layout_constraintEnd_toStartOf="@+id/tv_profile_selling_header"
+        app:layout_constraintEnd_toStartOf="@+id/tv_profile_buying_header"
         app:layout_constraintHorizontal_bias="0.144"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_profile_selling"
+        android:id="@+id/rv_profile_buying"
         android:layout_width="match_parent"
         android:layout_height="555dp"
         android:layout_marginTop="20dp"
@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_selling_header" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_buying_header" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,10 @@ public class TicketPurchasedActivity extends AppCompatActivity {
         ticket = (Ticket) intent.getSerializableExtra("ticket");
 
         ticket.setAvailable(false);
+
         Utility.updateTicketOnDatabase("TicketPurchasedActivity", ticket);
+
+        Utility.addTicketToDatabaseAndUser("TicketPurchasedActivity", ticket, "buying");
 
         TextView ticketInfo = (TextView) findViewById(R.id.ticketInfoTextView);
 

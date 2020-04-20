@@ -22,6 +22,7 @@
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.ProfileSellingActivity" />
+        <activity android:name=".activities.ProfileBuyingActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.SettingsActivity"
             android:label="Settings"
