@@ -17,7 +17,6 @@ public class Ticket implements Serializable {
     private String event;
     private String price;
     private boolean available;
-    private boolean seen;
     private String uid;
 
     /**
@@ -44,7 +43,6 @@ public class Ticket implements Serializable {
         this.available = available;
         this.price = price;
         this.uid = uid;
-        this.seen = false;
     }
 
     /**
@@ -92,30 +90,12 @@ public class Ticket implements Serializable {
     }
 
     /**
-     * Getter for seen.
-     *
-     * @return current seen
-     */
-    public boolean isSeen() {
-        return seen;
-    }
-
-    /**
      * Setter for available.
      *
      * @param available available to set
      */
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    /**
-     * Setter for seen.
-     *
-     * @param seen available to set
-     */
-    public void setSeen(boolean seen) {
-        this.seen = seen;
     }
 
     /**

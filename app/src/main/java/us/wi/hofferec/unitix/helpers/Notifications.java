@@ -19,11 +19,11 @@ import static us.wi.hofferec.unitix.helpers.App.CHANNEL_1_ID;
 
 public class Notifications {
 
-    // Initiates notification and marks the transaction as seen on the Firebase
-    public static void notifyTicketIsSold(Context context, Ticket t){
-        sendSoldNotification(context, t);
-        t.setSeen(true);
-        Utility.updateTicketOnDatabase("UTIL", t);
+    // Initiates notification and marks the transaction as unavailable on the Firebase
+    public static void notifyTicketIsSold(Context context, Ticket ticket){
+        sendSoldNotification(context, ticket);
+        ticket.setAvailable(false);
+        Utility.updateTicketOnDatabase("Notifications", ticket);
     }
 
     // Pushes notification to user that their ticket has been sold.
