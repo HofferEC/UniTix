@@ -1,5 +1,6 @@
 package us.wi.hofferec.unitix.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,11 +10,22 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.firestore.FirestoreArray;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,15 +34,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.adapters.TicketAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
+import us.wi.hofferec.unitix.helpers.Notifications;
 
 public class TicketMarketplaceActivity extends AppCompatActivity {
 
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private CollectionReference ticketsRef;
     private TicketAdapter adapter;
-
-    private String sortField;
-    private boolean ascending;
+    private ArrayList<Ticket> ticketsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,26 +54,27 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         setProfileImage();
 
         ticketsRef = database.collection("tickets");
+        ticketsList = new ArrayList<Ticket>();
 
         // Setup Textviews for filtering the tickets list
         findViewById(R.id.tv_marketplace_date).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 sortRecyclerView("date");
+                 // TODO: sort by date
              }
          });
         findViewById(R.id.tv_marketplace_event).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 sortRecyclerView("event");
+                 // TODO: sort by event
              }
          });
         findViewById(R.id.tv_marketplace_price).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 sortRecyclerView("price");
+                 // TODO: sort by price
              }
          });
         findViewById(R.id.tv_marketplace_teams).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 sortRecyclerView("homeTeam");
+                 // TODO: sort by teams
              }
          });
 
@@ -75,87 +87,58 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
               // When focus is lost check that the text field has valid values.
               if (!hasFocus) {
                  String filterText = et_search.getText().toString();
-                 if (!filterText.isEmpty())
-                    filterRecyclerView(filterText);
+                 if (!filterText.isEmpty());
+                    //TODO filter for text
               }
             }
          });
 
-        sortField = "date";
-        ascending = true;
-        setupRecyclerView();
+        setupRecyclerView(this);
     }
 
-    // Initial setup for recyclerview. Defaults to sort by date.
-    private void setupRecyclerView() {
-        Query query = ticketsRef.whereEqualTo("available", true).orderBy("date", Query.Direction.ASCENDING);
+    // Initial setup for recyclerview.
+    private void setupRecyclerView(final Context context) {
+        Query query = ticketsRef.whereEqualTo("available", true);
 
-        // Recycler Options (How we get the query into the recycler adapter)
-        FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
-                .setQuery(query, Ticket.class)
-                .build();
+        // retrieve  query results asynchronously using query.get()
+        query.get().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("TicketMarketplace", e.getMessage());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot snapshot) {
+                        Log.i("TicketMarketplace", "Successful database read. Items: " + snapshot.size());
+                        List<DocumentSnapshot> documentsList = snapshot.getDocuments();
+                        for (DocumentSnapshot d : documentsList){
+                            if (LoginActivity.user.getTicketsSelling().contains(d.getReference())){
+                                Log.i("TicketMarketplace", "Skipping user's ticket: " + d.getId());
+                                continue;
+                            }
+                            ticketsList.add(d.toObject(Ticket.class));
+                            Log.i("TicketMarketplace", "Adding ticket to marketplace: " + d.getId());
+                            Log.i("TicketMarketplace", "" + ticketsList.size());
+                        }
 
-        adapter = new TicketAdapter(options);
+                        // Recycler Options (How we get the tickets into the adapter)
+                        adapter = new TicketAdapter(ticketsList);
 
-        // Get the recyclerView
-        RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
+                        // Get the recyclerView
+                        RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
 
-        // Don't allow recyclerView to resize
-        recyclerView.setHasFixedSize(true);
+                        // Don't allow recyclerView to resize
+                        recyclerView.setHasFixedSize(true);
 
-        // Set Layout type
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+                        // Set Layout type
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.setAdapter(adapter);
 
-        // Add dividers between items
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-    }
-
-    // Sorts the recyclerview, flips ascending or descending
-    private void sortRecyclerView(String newSortField) {
-        if (newSortField.equals(sortField)) {
-            ascending = !ascending;
-        } else {
-            ascending = false;
-        }
-        sortField = newSortField;
-        Log.i("Marketplace", "Sorting marketplace by " + sortField + ", " + (ascending ? "ascending" : "descending"));
-        Query query = ticketsRef.whereEqualTo("available", true).orderBy(newSortField, ascending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING);
-
-        // Recycler Options (How we get the query into the recycler adapter)
-        FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
-                .setQuery(query, Ticket.class)
-                .build();
-
-        adapter.updateOptions(options);
-        adapter.notifyDataSetChanged();
-    }
-
-    // Filters the recyclerview by the defined text. Keeps the same sorting.
-    private void filterRecyclerView(String filterText) {
-        Log.i("Marketplace", "Filtering marketplace for " + filterText);
-        Query query = ticketsRef.whereEqualTo(sortField, filterText).orderBy(sortField, ascending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING);
-
-        // Recycler Options (How we get the query into the recycler adapter)
-        FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
-                .setQuery(query, Ticket.class)
-                .build();
-
-        adapter.updateOptions(options);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+                        // Add dividers between items
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+                        recyclerView.addItemDecoration(dividerItemDecoration);
+                    }
+                });
     }
 
     public void goToHome(View view){

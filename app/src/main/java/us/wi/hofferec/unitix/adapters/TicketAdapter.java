@@ -1,6 +1,7 @@
 package us.wi.hofferec.unitix.adapters;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,17 @@ import android.widget.TextView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.activities.ConfirmPurchaseActivity;
 import us.wi.hofferec.unitix.data.Ticket;
 
-public class TicketAdapter extends FirestoreRecyclerAdapter<Ticket, TicketAdapter.TicketHolder> {
+public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHolder> {
+
+    private List<Ticket> ticketsList;
 
     /**
      * Provides a direct reference to each of the views within a data item and caches the views
@@ -46,18 +51,15 @@ public class TicketAdapter extends FirestoreRecyclerAdapter<Ticket, TicketAdapte
         }
     }
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See
-     * {@link FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options adapter settings
-     */
-    public TicketAdapter(FirestoreRecyclerOptions<Ticket> options) {
-        super(options);
+    public TicketAdapter(List<Ticket> tickets) {
+        this.ticketsList = tickets;
     }
 
     @Override
-    protected void onBindViewHolder(TicketHolder ticketHolder, int position, final Ticket ticket) {
+    public void onBindViewHolder(@NonNull TicketHolder ticketHolder, int position) {
+
+        final Ticket ticket = ticketsList.get(position);
+        Log.i("TicketAdapter", "Loaded ticket: " + ticket.getUid());
 
         ticketHolder.eventTextView.setText(ticket.getEvent());
 
@@ -79,13 +81,20 @@ public class TicketAdapter extends FirestoreRecyclerAdapter<Ticket, TicketAdapte
                 view.getContext().startActivity(intent);
             }
         });
+
     }
 
     @NonNull
     @Override
     public TicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.i("TicketAdapter", "Inflating a ticket");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ticket, parent, false);
         return new TicketHolder(view);
+    }
+
+    @Override
+    public int getItemCount() {
+        return ticketsList.size();
     }
 
 }
