@@ -26,6 +26,7 @@
         android:layout_marginTop="16dp"
         android:background="#00000000"
         android:onClick="goBack"
+        android:tint="@color/colorHomePrimary"
         app:layout_constraintEnd_toStartOf="@+id/tv_profile_buying_header"
         app:layout_constraintHorizontal_bias="0.144"
         app:layout_constraintStart_toStartOf="parent"
