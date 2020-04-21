@@ -59,7 +59,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
     public void onBindViewHolder(@NonNull TicketHolder ticketHolder, int position) {
 
         final Ticket ticket = ticketsList.get(position);
-        Log.i("TicketAdapter", "Loaded ticket: " + ticket.getUid());
 
         ticketHolder.eventTextView.setText(ticket.getEvent());
 
@@ -87,7 +86,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
     @NonNull
     @Override
     public TicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.i("TicketAdapter", "Inflating a ticket");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ticket, parent, false);
         return new TicketHolder(view);
     }

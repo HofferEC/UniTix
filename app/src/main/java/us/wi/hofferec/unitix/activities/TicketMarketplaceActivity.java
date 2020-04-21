@@ -1,6 +1,5 @@
 package us.wi.hofferec.unitix.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,17 +9,13 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.firebase.ui.firestore.FirestoreArray;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.adapters.TicketAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
-import us.wi.hofferec.unitix.helpers.Notifications;
 
 public class TicketMarketplaceActivity extends AppCompatActivity {
 
@@ -87,17 +81,35 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
               // When focus is lost check that the text field has valid values.
               if (!hasFocus) {
                  String filterText = et_search.getText().toString();
-                 if (!filterText.isEmpty());
-                    //TODO filter for text
+                 if (!filterText.isEmpty()) {
+                     Log.i("TicketMarketplace", "Searching tickets for text: " + filterText);
+                     List<Ticket> searchedTickets = searchTicketsForText(filterText);
+                     fillRecyclerView(searchedTickets);
+                 }
               }
             }
          });
 
-        setupRecyclerView(this);
+        setupRecyclerView();
+    }
+
+    // Searches the tickets list and solves
+    public List<Ticket> searchTicketsForText(final String searchTerm){
+        ArrayList<Ticket> filteredTicketsList = new ArrayList<>();
+        for (Ticket t : ticketsList){
+            if (t.getDate().contains(searchTerm)
+                || t.getEvent().contains(searchTerm)
+                || t.getPrice().contains(searchTerm)
+                || t.getHomeTeam().contains(searchTerm)
+                || t.getAwayTeam().contains(searchTerm)) {
+                filteredTicketsList.add(t);
+            }
+        }
+        return filteredTicketsList;
     }
 
     // Initial setup for recyclerview.
-    private void setupRecyclerView(final Context context) {
+    private void setupRecyclerView() {
         Query query = ticketsRef.whereEqualTo("available", true);
 
         // retrieve  query results asynchronously using query.get()
@@ -113,32 +125,39 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
                         List<DocumentSnapshot> documentsList = snapshot.getDocuments();
                         for (DocumentSnapshot d : documentsList){
                             if (LoginActivity.user.getTicketsSelling().contains(d.getReference())){
-                                Log.i("TicketMarketplace", "Skipping user's ticket: " + d.getId());
                                 continue;
                             }
                             ticketsList.add(d.toObject(Ticket.class));
-                            Log.i("TicketMarketplace", "Adding ticket to marketplace: " + d.getId());
-                            Log.i("TicketMarketplace", "" + ticketsList.size());
                         }
-
-                        // Recycler Options (How we get the tickets into the adapter)
-                        adapter = new TicketAdapter(ticketsList);
-
-                        // Get the recyclerView
-                        RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
-
-                        // Don't allow recyclerView to resize
-                        recyclerView.setHasFixedSize(true);
-
-                        // Set Layout type
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(adapter);
-
-                        // Add dividers between items
-                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-                        recyclerView.addItemDecoration(dividerItemDecoration);
+                        fillRecyclerView(ticketsList);
                     }
                 });
+    }
+
+    /**
+     *  Populates the RecyclerView with a list of tickets.
+     *
+     *  Note that this method is written heavily favoring simplicity over efficiency.
+     *  A more efficient solution would be to use recyclerview add and remove methods.
+     *  We will update this if the efficiency gains prove necessary.
+     */
+    public void fillRecyclerView(List<Ticket> ticketsListToShow) {
+        // Instantiates a TicketAdapter(intermediate class between RecyclerView and our data
+        adapter = new TicketAdapter(ticketsListToShow);
+
+        // Get the recyclerView
+        RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
+
+         // Don't allow recyclerView to resize
+        recyclerView.setHasFixedSize(true);
+
+        // Set Layout type
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        // Add dividers between items
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     public void goToHome(View view){
