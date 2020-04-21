@@ -149,8 +149,11 @@ public class Utility {
 
                         Ticket ticket = snapshot.toObject(Ticket.class);
 
-                        if (!ticket.isAvailable() && (Boolean)LoginActivity.user.getSettings().get("notifications")) {
+                        if (!ticket.isAvailable() && !ticket.isSeen()) {
                             Notifications.notifyTicketIsSold(context, ticket);
+                            ticket.setSeen(true);
+                            // Rewrite the ticket to the database to update seen value
+                            updateTicketOnDatabase("Utility", ticket);
                         }
                     }
                 });

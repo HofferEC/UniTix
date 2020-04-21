@@ -18,6 +18,7 @@ public class Ticket implements Serializable {
     private String price;
     private boolean available;
     private String uid;
+    private boolean seen;
 
     /**
      * Empty Constructor (Used for FireStore serialization)
@@ -43,6 +44,25 @@ public class Ticket implements Serializable {
         this.available = available;
         this.price = price;
         this.uid = uid;
+        this.seen = false;
+    }
+
+    /**
+     * Getter for seen.
+     *
+     * @return current seen
+     */
+    public boolean isSeen() {
+        return seen;
+    }
+
+    /**
+     * Setter for seen.
+     *
+     * @param seen seen to set
+     */
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 
     /**
