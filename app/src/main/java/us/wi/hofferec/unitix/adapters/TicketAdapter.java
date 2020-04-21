@@ -62,7 +62,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
 
         ticketHolder.eventTextView.setText(ticket.getEvent());
 
-        StringBuilder info = new StringBuilder(ticket.getAwayTeam() + " @ " + ticket.getHomeTeam());
+        StringBuilder info = new StringBuilder(ticket.getAwayTeam() + "\n@ " + ticket.getHomeTeam());
         ticketHolder.infoTextView.setText(info);
 
         ticketHolder.dateTextView.setText(ticket.getDate());
