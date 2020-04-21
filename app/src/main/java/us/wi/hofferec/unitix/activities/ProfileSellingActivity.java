@@ -20,6 +20,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
@@ -47,15 +48,22 @@ public class ProfileSellingActivity extends AppCompatActivity {
         // Get the current user
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Save the data
-        final List<Ticket> data = new ArrayList<>();
-
+        // Get the recycler view
         recyclerView = findViewById(R.id.rv_profile_selling);
 
+        // Don't allow recyclerView to resize
         recyclerView.setHasFixedSize(true);
 
+        // Set Layout type
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        // Add dividers between items
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        // Save the data
+        final List<Ticket> data = new ArrayList<>();
 
         if (firebaseUser != null) {
             String uid = firebaseUser.getUid();
@@ -71,11 +79,13 @@ public class ProfileSellingActivity extends AppCompatActivity {
                                 Task<DocumentSnapshot> documentSnapshotTask = documentReference.get();
                                 tasks.add(documentSnapshotTask);
                             }
+                            // Only move to the next step when all data is loaded
                             Tasks.whenAllSuccess(tasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
                                 @Override
                                 public void onSuccess(List<Object> list) {
 
-                                    // This list now contains all the tickets as references
+                                    // This list now contains all the tickets as snapshots
+                                    // Convert each snapshot to its object type
                                     for (Object object : list) {
                                         Ticket ticket = ((DocumentSnapshot) object).toObject(Ticket.class);
                                         data.add(ticket);

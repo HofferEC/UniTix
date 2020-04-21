@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -96,11 +97,19 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
 
         adapter = new TicketAdapter(options);
 
+        // Get the recyclerView
         RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
 
+        // Don't allow recyclerView to resize
         recyclerView.setHasFixedSize(true);
+
+        // Set Layout type
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        // Add dividers between items
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     // Sorts the recyclerview, flips ascending or descending
