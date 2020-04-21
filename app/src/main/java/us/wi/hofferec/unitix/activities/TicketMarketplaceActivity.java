@@ -18,6 +18,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -34,8 +37,12 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
 
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private CollectionReference ticketsRef;
-    private TicketAdapter adapter;
     private ArrayList<Ticket> ticketsList;
+
+    private enum SortField { EVENT, EVENT_REVERSE, DATE, DATE_REVERSE,
+        PRICE, PRICE_REVERSE, TEAM, TEAM_REVERSE }
+
+    private SortField lastSorted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,27 +55,27 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         setProfileImage();
 
         ticketsRef = database.collection("tickets");
-        ticketsList = new ArrayList<Ticket>();
+        ticketsList = new ArrayList<>();
 
         // Setup Textviews for filtering the tickets list
         findViewById(R.id.tv_marketplace_date).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 // TODO: sort by date
+                 sortByDate();
              }
          });
         findViewById(R.id.tv_marketplace_event).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 // TODO: sort by event
+                 sortByEvent();
              }
          });
         findViewById(R.id.tv_marketplace_price).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 // TODO: sort by price
+                 sortByPrice();
              }
          });
         findViewById(R.id.tv_marketplace_teams).setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
-                 // TODO: sort by teams
+                 sortByTeam();
              }
          });
 
@@ -90,26 +97,20 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
             }
          });
 
+        lastSorted = SortField.DATE;
         setupRecyclerView();
-    }
-
-    // Searches the tickets list and solves
-    public List<Ticket> searchTicketsForText(final String searchTerm){
-        ArrayList<Ticket> filteredTicketsList = new ArrayList<>();
-        for (Ticket t : ticketsList){
-            if (t.getDate().contains(searchTerm)
-                || t.getEvent().contains(searchTerm)
-                || t.getPrice().contains(searchTerm)
-                || t.getHomeTeam().contains(searchTerm)
-                || t.getAwayTeam().contains(searchTerm)) {
-                filteredTicketsList.add(t);
-            }
-        }
-        return filteredTicketsList;
     }
 
     // Initial setup for recyclerview.
     private void setupRecyclerView() {
+
+        // Add dividers between items
+        RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+
+        // Query Firebase for tickets
         Query query = ticketsRef.whereEqualTo("available", true);
 
         // retrieve  query results asynchronously using query.get()
@@ -129,7 +130,7 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
                             }
                             ticketsList.add(d.toObject(Ticket.class));
                         }
-                        fillRecyclerView(ticketsList);
+                        sortByDate();
                     }
                 });
     }
@@ -143,7 +144,7 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
      */
     public void fillRecyclerView(List<Ticket> ticketsListToShow) {
         // Instantiates a TicketAdapter(intermediate class between RecyclerView and our data
-        adapter = new TicketAdapter(ticketsListToShow);
+        TicketAdapter adapter = new TicketAdapter(ticketsListToShow);
 
         // Get the recyclerView
         RecyclerView recyclerView = findViewById(R.id.rv_find_ticket_details);
@@ -154,10 +155,111 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         // Set Layout type
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
 
-        // Add dividers between items
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+    // Sorts the tickets list by date
+    private void sortByDate(){
+        // If sorted by date last, alternate the sorting by clicking again
+        if (lastSorted == SortField.DATE)
+            lastSorted = SortField.DATE_REVERSE;
+        else
+            lastSorted = SortField.DATE;
+        final int reverseMod = (lastSorted == SortField.DATE_REVERSE ? -1 : 1);
+
+        // Sort the list
+        Collections.sort(ticketsList, new Comparator<Ticket>() {
+            @Override
+            public int compare(Ticket a, Ticket b) {
+                // Date format "MM/DD/YYYY"
+                String[] aDateArgs = a.getDate().split("/");
+                String[] bDateArgs = b.getDate().split("/");
+
+                // Puts the date strings into YYYY/MM/DD format so that string comparison works
+                String aDateConcat = aDateArgs[2] + aDateArgs[0] + aDateArgs[1];
+                String bDateConcat = bDateArgs[2] + bDateArgs[0] + bDateArgs[1];
+                return reverseMod * aDateConcat.compareTo(bDateConcat);
+            }
+        });
+        fillRecyclerView(ticketsList);
+    }
+
+    // Sorts the tickets list by price
+    private void sortByPrice(){
+        // If sorted by price last, alternate the sorting by clicking again
+        if (lastSorted == SortField.PRICE)
+            lastSorted = SortField.PRICE_REVERSE;
+        else
+            lastSorted = SortField.PRICE;
+        final int reverseMod = (lastSorted == SortField.PRICE_REVERSE ? -1 : 1);
+
+        // Sort the list
+        Collections.sort(ticketsList, new Comparator<Ticket>() {
+            @Override
+            public int compare(Ticket a, Ticket b) {
+                float aPrice = Float.parseFloat(a.getPrice());
+                float bPrice = Float.parseFloat(b.getPrice());
+                return reverseMod * Float.compare(aPrice, bPrice);
+            }
+        });
+        fillRecyclerView(ticketsList);
+    }
+
+    // Sorts the tickets list by Away Team
+    // NOTE: Chosen to compare by Away team instead of Home team because the app is focused towards
+    // events where UW-Madison will be the home team.
+    private void sortByTeam(){
+        // If sorted by team last, alternate the sorting by clicking again
+        if (lastSorted == SortField.TEAM)
+            lastSorted = SortField.TEAM_REVERSE;
+        else
+            lastSorted = SortField.TEAM;
+        final int reverseMod = (lastSorted == SortField.TEAM_REVERSE ? -1 : 1);
+
+        // Sort the list
+        Collections.sort(ticketsList, new Comparator<Ticket>() {
+            @Override
+            public int compare(Ticket a, Ticket b) {
+                return reverseMod * (a.getAwayTeam().compareToIgnoreCase(b.getAwayTeam()));
+            }
+        });
+        fillRecyclerView(ticketsList);
+    }
+
+    // Sorts the tickets list by Event
+    private void sortByEvent(){
+        // If sorted by team last, alternate the sorting by clicking again
+        if (lastSorted == SortField.EVENT)
+            lastSorted = SortField.EVENT_REVERSE;
+        else
+            lastSorted = SortField.EVENT;
+        final int reverseMod = (lastSorted == SortField.EVENT_REVERSE ? -1 : 1);
+
+        // Sort the list
+        Collections.sort(ticketsList, new Comparator<Ticket>() {
+            @Override
+            public int compare(Ticket a, Ticket b) {
+                return reverseMod * (a.getEvent().compareToIgnoreCase(b.getEvent()));
+            }
+        });
+        fillRecyclerView(ticketsList);
+    }
+
+    // Searches the tickets list and returns a list of tickets with at least one field
+    // containing the given search term.
+    public List<Ticket> searchTicketsForText(final String searchTerm){
+        if (searchTerm == null || searchTerm.isEmpty())
+            return ticketsList;
+        ArrayList<Ticket> filteredTicketsList = new ArrayList<>();
+        for (Ticket t : ticketsList){
+            if (t.getDate().contains(searchTerm)
+                || t.getEvent().contains(searchTerm)
+                || t.getPrice().contains(searchTerm)
+                || t.getHomeTeam().contains(searchTerm)
+                || t.getAwayTeam().contains(searchTerm)) {
+                filteredTicketsList.add(t);
+            }
+        }
+        return filteredTicketsList;
     }
 
     public void goToHome(View view){
