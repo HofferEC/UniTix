@@ -4,9 +4,9 @@
     <color name="colorPrimary">#A1002F</color>
     <color name="colorPrimaryDark">#8B0037</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorText">#222222</color>
+    <color name="colorText">#EEEEEE</color>
     <color name="colorBlack">#000000</color>
     <color name="colorAccent">#FFBF00</color>
     <color name="colorAccentDark">#A1002F</color>
-    <color name="colorHomePrimary">#222222</color>
+    <color name="colorHomePrimary">#EEEEEE</color>
 </resources>

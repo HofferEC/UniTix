@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="UniTix"
-        android:textAppearance="@style/SubHeader"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +28,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="Email:"
-        android:textAppearance="@style/BasicText"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_signup_header" />
 
@@ -51,7 +54,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Password:"
-        android:textAppearance="@style/BasicText"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_signup_name" />
 
@@ -76,7 +80,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Confirm Password:"
-        android:textAppearance="@style/BasicText"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_signup_password" />
 
@@ -131,7 +136,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Name:"
-        android:textAppearance="@style/BasicText"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_signup_email" />
 

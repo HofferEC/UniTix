@@ -29,7 +29,8 @@
         android:onClick="goToHome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_house" />
+        app:srcCompat="@drawable/ic_home_black_24dp"
+        android:tint="@color/colorHomePrimary" />
 
     <TextView
         android:id="@+id/tv_find_ticket_header"
@@ -37,7 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Find Tickets"
-        android:textAppearance="@style/SubHeader"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

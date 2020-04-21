@@ -29,7 +29,8 @@
         android:background="#00000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_house" />
+        app:srcCompat="@drawable/ic_home_black_24dp"
+        android:tint="@color/colorHomePrimary"/>
 
     <TextView
         android:id="@+id/tv_sell_ticket_header"
@@ -37,7 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Sell Ticket"
-        android:textAppearance="@style/SubHeader"
+        android:textAppearance="@style/Theme.AppCompat.DayNight"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +106,8 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Date:"
-                android:textAppearance="@style/SubHeader" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/et_sell_ticket_date"
@@ -119,7 +123,8 @@
                 android:ems="10"
                 android:hint="dd/mm/yyyy"
                 android:inputType="date"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_sell_ticket_event"
@@ -131,7 +136,8 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Event:"
-                android:textAppearance="@style/SubHeader" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <Spinner
                 android:id="@+id/spinner_sell_ticket_event"
@@ -139,7 +145,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="16sp"
                 android:paddingBottom="8sp"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_sell_ticket_home_team"
@@ -151,7 +158,8 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Home Team:"
-                android:textAppearance="@style/SubHeader" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/et_sell_ticket_home_team"
@@ -166,7 +174,8 @@
                 android:layout_marginBottom="0dp"
                 android:ems="10"
                 android:hint="Wisconsin"
-                android:textAppearance="@style/BasicText"
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"
                 android:inputType="text" />
 
             <TextView
@@ -179,7 +188,8 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Away Team:"
-                android:textAppearance="@style/SubHeader" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/et_sell_ticket_away_Team"
@@ -195,7 +205,8 @@
                 android:ems="10"
                 android:hint="Michigan"
                 android:inputType="text"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_sell_ticket_price"
@@ -207,7 +218,8 @@
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
                 android:text="Price:"
-                android:textAppearance="@style/SubHeader" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/et_sell_ticket_price"
@@ -223,7 +235,8 @@
                 android:ems="10"
                 android:hint="10.52"
                 android:inputType="numberDecimal"
-                android:textAppearance="@style/BasicText" />
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp"/>
 
         </LinearLayout>
     </ScrollView>
