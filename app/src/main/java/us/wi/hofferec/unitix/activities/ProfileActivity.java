@@ -24,6 +24,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.Utility;
 
@@ -66,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void logout(View view){
         sharedPreferences.edit().remove("USER").apply();
         FirebaseAuth.getInstance().signOut();
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

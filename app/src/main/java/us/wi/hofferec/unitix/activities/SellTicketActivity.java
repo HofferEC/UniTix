@@ -2,10 +2,12 @@ package us.wi.hofferec.unitix.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -13,11 +15,18 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.helpers.Configs;
 import us.wi.hofferec.unitix.helpers.Validation;
 
 public class SellTicketActivity extends AppCompatActivity {
+
+    private EditText dateEditText;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +41,31 @@ public class SellTicketActivity extends AppCompatActivity {
         eventSpinner.setAdapter(adapter);
 
         setProfileImage();
+
+        // Setup date picker
+        calendar = Calendar.getInstance();
+        dateEditText = findViewById(R.id.et_sell_ticket_date);
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day);
+                updateLabel();
+            }
+        };
+
+        // Date picker listener
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(SellTicketActivity.this, date,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
     }
 
     public void goToHome(View view){
@@ -85,6 +119,15 @@ public class SellTicketActivity extends AppCompatActivity {
 
             finish();
         }
+    }
+
+    /**
+     * Updates date label with the date selected
+     */
+    private void updateLabel() {
+        String myFormat = "MM/dd/yyyy";
+        SimpleDateFormat date = new SimpleDateFormat(myFormat, Locale.US);
+        dateEditText.setText(date.format(calendar.getTime()));
     }
 
     /**
