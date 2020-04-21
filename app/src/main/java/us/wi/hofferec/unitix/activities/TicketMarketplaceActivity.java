@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -20,7 +21,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -39,6 +39,10 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     private CollectionReference ticketsRef;
     private ArrayList<Ticket> ticketsList;
 
+    private TextView dateHeader, priceHeader, teamHeader, eventHeader;
+
+    int sortColorAscending, sortColorDescending;
+
     private enum SortField { EVENT, EVENT_REVERSE, DATE, DATE_REVERSE,
         PRICE, PRICE_REVERSE, TEAM, TEAM_REVERSE }
 
@@ -49,6 +53,9 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_marketplace);
 
+        sortColorAscending = getResources().getColor(R.color.colorAccent);
+        sortColorDescending = getResources().getColor(R.color.colorPrimaryLight);
+
         // Request the focus of the recycler view because android....
         findViewById(R.id.rv_find_ticket_details).requestFocus();
 
@@ -58,23 +65,32 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         ticketsList = new ArrayList<>();
 
         // Setup Textviews for filtering the tickets list
-        findViewById(R.id.tv_marketplace_date).setOnClickListener(new View.OnClickListener() {
+        dateHeader = findViewById(R.id.tv_marketplace_date);
+        priceHeader = findViewById(R.id.tv_marketplace_price);
+        eventHeader = findViewById(R.id.tv_marketplace_event);
+        teamHeader = findViewById(R.id.tv_marketplace_teams);
+
+        dateHeader.setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
+                 clearHeaderColors();
                  sortByDate();
              }
          });
-        findViewById(R.id.tv_marketplace_event).setOnClickListener(new View.OnClickListener() {
+        eventHeader.setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
+                 clearHeaderColors();
                  sortByEvent();
              }
          });
-        findViewById(R.id.tv_marketplace_price).setOnClickListener(new View.OnClickListener() {
+        priceHeader.setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
+                 clearHeaderColors();
                  sortByPrice();
              }
          });
-        findViewById(R.id.tv_marketplace_teams).setOnClickListener(new View.OnClickListener() {
+        teamHeader.setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
+                 clearHeaderColors();
                  sortByTeam();
              }
          });
@@ -92,12 +108,13 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
                      Log.i("TicketMarketplace", "Searching tickets for text: " + filterText);
                      List<Ticket> searchedTickets = searchTicketsForText(filterText);
                      fillRecyclerView(searchedTickets);
+                 } else { // If search field empty, reset list to all items
+                     fillRecyclerView(ticketsList);
                  }
               }
             }
          });
 
-        lastSorted = SortField.DATE;
         setupRecyclerView();
     }
 
@@ -157,13 +174,26 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    // Resets each header tab to the default color value
+    private void clearHeaderColors(){
+        int defaultHeaderColor = getResources().getColor(R.color.colorText);
+
+        dateHeader.setTextColor(defaultHeaderColor);
+        priceHeader.setTextColor(defaultHeaderColor);
+        eventHeader.setTextColor(defaultHeaderColor);
+        teamHeader.setTextColor(defaultHeaderColor);
+    }
+
     // Sorts the tickets list by date
     private void sortByDate(){
         // If sorted by date last, alternate the sorting by clicking again
-        if (lastSorted == SortField.DATE)
+        if (lastSorted == SortField.DATE) {
             lastSorted = SortField.DATE_REVERSE;
-        else
+            dateHeader.setTextColor(sortColorDescending);
+        } else {
             lastSorted = SortField.DATE;
+            dateHeader.setTextColor(sortColorAscending);
+        }
         final int reverseMod = (lastSorted == SortField.DATE_REVERSE ? -1 : 1);
 
         // Sort the list
@@ -186,10 +216,13 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     // Sorts the tickets list by price
     private void sortByPrice(){
         // If sorted by price last, alternate the sorting by clicking again
-        if (lastSorted == SortField.PRICE)
+        if (lastSorted == SortField.PRICE) {
             lastSorted = SortField.PRICE_REVERSE;
-        else
+            priceHeader.setTextColor(sortColorDescending);
+        } else {
             lastSorted = SortField.PRICE;
+            priceHeader.setTextColor(sortColorAscending);
+        }
         final int reverseMod = (lastSorted == SortField.PRICE_REVERSE ? -1 : 1);
 
         // Sort the list
@@ -209,10 +242,13 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     // events where UW-Madison will be the home team.
     private void sortByTeam(){
         // If sorted by team last, alternate the sorting by clicking again
-        if (lastSorted == SortField.TEAM)
+        if (lastSorted == SortField.TEAM) {
             lastSorted = SortField.TEAM_REVERSE;
-        else
+            teamHeader.setTextColor(sortColorDescending);
+        } else {
             lastSorted = SortField.TEAM;
+            teamHeader.setTextColor(sortColorAscending);
+        }
         final int reverseMod = (lastSorted == SortField.TEAM_REVERSE ? -1 : 1);
 
         // Sort the list
@@ -228,10 +264,13 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     // Sorts the tickets list by Event
     private void sortByEvent(){
         // If sorted by team last, alternate the sorting by clicking again
-        if (lastSorted == SortField.EVENT)
+        if (lastSorted == SortField.EVENT) {
             lastSorted = SortField.EVENT_REVERSE;
-        else
+            eventHeader.setTextColor(sortColorDescending);
+        } else {
             lastSorted = SortField.EVENT;
+            eventHeader.setTextColor(sortColorAscending);
+        }
         final int reverseMod = (lastSorted == SortField.EVENT_REVERSE ? -1 : 1);
 
         // Sort the list
