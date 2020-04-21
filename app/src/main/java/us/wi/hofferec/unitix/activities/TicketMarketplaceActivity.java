@@ -121,7 +121,7 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
         }
         sortField = newSortField;
         Log.i("Marketplace", "Sorting marketplace by " + sortField + ", " + (ascending ? "ascending" : "descending"));
-        Query query = ticketsRef.orderBy(newSortField, ascending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING);
+        Query query = ticketsRef.whereEqualTo("available", true).orderBy(newSortField, ascending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING);
 
         // Recycler Options (How we get the query into the recycler adapter)
         FirestoreRecyclerOptions<Ticket> options = new FirestoreRecyclerOptions.Builder<Ticket>()
