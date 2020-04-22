@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupImageFlipper(){
         ViewFlipper flipper = findViewById(R.id.vf_main);
-        flipper.setFlipInterval(5000);
-        flipper.setInAnimation(this, R.anim.fui_slide_in_right);
-        flipper.setOutAnimation(this, R.anim.fui_slide_out_left);
+        flipper.setFlipInterval(7000);
+        flipper.setInAnimation(this, R.anim.slide_in_right);
+        flipper.setOutAnimation(this, R.anim.slide_out_left);
         flipper.startFlipping();
     }
 }
