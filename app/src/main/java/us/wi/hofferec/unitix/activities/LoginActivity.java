@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.User;
 import us.wi.hofferec.unitix.data.Utility;
@@ -225,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             // Go to home screen, since all the information is loaded
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
 
                         } else {
@@ -240,12 +241,31 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void applyCustomUserSettings(){
 
+        // Have to switch shared preferences to the one that holds our settings
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         // Apply dark mode
         if (user.getSettings().get("darkMode") != null) {
-            if (((Boolean) user.getSettings().get("darkMode")))
+            if (((Boolean) user.getSettings().get("darkMode"))) {
+                sharedPreferences.edit().putBoolean("darkModeEnabled", true).apply();
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            else
+            }
+            else {
+                sharedPreferences.edit().putBoolean("darkModeEnabled", false).apply();
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
         }
+
+        // Apply notifications settings
+        if (user.getSettings().get("notifications") != null) {
+            if ((Boolean) user.getSettings().get("notifications")) {
+                sharedPreferences.edit().putBoolean("notificationsKey", true).apply();
+            }
+            else {
+                sharedPreferences.edit().putBoolean("notificationsKey", false).apply();
+            }
+        }
+
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
     }
 }
