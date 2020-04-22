@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         // Check if the user's tickets have been sold. If so, sends notification.
         if ((boolean) LoginActivity.user.getSettings().get("notifications"))
             Utility.checkForSoldTickets(getApplicationContext(), "MainActivity", LoginActivity.user);
+
     }
 
     public void openMarketplace(View view) {

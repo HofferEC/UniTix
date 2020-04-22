@@ -37,6 +37,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.Ticket;
+import us.wi.hofferec.unitix.data.Utility;
 import us.wi.hofferec.unitix.databinding.ConfirmPurchaseBinding;
 import us.wi.hofferec.unitix.helpers.PaymentsUtil;
 
@@ -75,13 +76,19 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
 
         TextView ticketInfo = (TextView) findViewById(R.id.ticketInfoTextView);
 
-        ticketInfo.setText("Event: " + ticket.getEvent() + "\n\n" +
-                "Teams: " + ticket.getAwayTeam() + " @ " + ticket.getHomeTeam() + "\n\n" +
-                "Date: " + ticket.getDate() + "\n\n" +
-                "Price: $" + ticket.getPrice());
+        ticketInfo.append("Event: " + ticket.getEvent() + "\n\n");
+        ticketInfo.append("Teams: " + ticket.getAwayTeam() + " @ " + ticket.getHomeTeam() + "\n\n");
+        ticketInfo.append("Date: " + ticket.getDate() + "\n\n");
 
-
-
+        if (LoginActivity.user.getSettings().get("currency").equals("USD")){
+            ticketInfo.append("$" + ticket.getPrice());
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
+            ticketInfo.append("€" + Utility.convert(Double.parseDouble(ticket.getPrice()), "EUR"));
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
+            ticketInfo.append("£" + Utility.convert(Double.parseDouble(ticket.getPrice()), "GBP"));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Notifications.createNotificationChannelIfNotCreated(this);

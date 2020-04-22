@@ -11,12 +11,24 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import us.wi.hofferec.unitix.activities.LoginActivity;
 import us.wi.hofferec.unitix.helpers.Notifications;
+import us.wi.hofferec.unitix.interfaces.CurrencyInterface;
 
 /**
  * This class is used to obtain and use different instances for this user by abstracting away a lot
@@ -29,6 +41,8 @@ public class Utility {
 
     // Collection that stores our ticket information
     private static final String TICKETS_COLLECTION = "tickets";
+
+    private static Map<String, Double> currencies;
 
     /**
      * Updates the current authenticated user in the users database using the current user
@@ -163,5 +177,95 @@ public class Utility {
                         + "\n" + e.getMessage());
             }
         }
+    }
+
+    /**
+     * Updates the currency rates for the day
+     */
+    public static void updateCurrencyRates(){
+
+        // Create instance of REST API with Retrofit
+        Retrofit retrofit = new retrofit2.Retrofit.Builder()
+                .baseUrl(CurrencyInterface.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+
+        CurrencyInterface currencyInterface = retrofit.create(CurrencyInterface.class);
+
+        // We have to get currency rates converted from EUR because we are using the free version
+        Call<String> call = currencyInterface.getCurrencyRatesFromEUR();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.body() != null) {
+                    Log.i("Utility/updateCurrency", "Successfully received currency response");
+                    String jsonResponse = response.body();
+
+                    writeJsonToCurrency(jsonResponse);
+                }
+                else {
+                    Log.i("Utility/updateCurrency", "Returned empty response");
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("Utility/updateCurrency", t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Takes the json that contains the currencies and pulls currencies out into data structure
+     *
+     * @param json json that contains currencies
+     */
+    private static void writeJsonToCurrency(String json){
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+
+            if (jsonObject.optString("success").equals("true")) {
+
+                // Data structure to hold all our currencies
+                currencies = new HashMap<>();
+
+                JSONObject allCurrencies = jsonObject.getJSONObject("rates");
+
+                currencies.put("EUR", 1/Double.parseDouble(allCurrencies.get("USD").toString()));
+                Log.i("Utility/readCurrency", "Successfully read EUR exchange rate");
+
+                currencies.put("GBP", Double.parseDouble(allCurrencies.get("GBP").toString()));
+                Log.i("Utility/readCurrency", "Successfully read GBP exchange rate");
+
+            }
+        }
+        catch (JSONException e) {
+            Log.e("Utility/writeCurrency", "Error pulling currencies out of json");
+        }
+    }
+
+    /**
+     * Converts startingAmount in USD into the endingCurrency using the most recent exchange rates.
+     *
+     * @param startingAmount amount of money to be converted
+     * @param endingCurrency the currency to be converted to
+     * @return the new currency after conversion
+     */
+    public static String convert(double startingAmount, String endingCurrency) {
+
+        double currencyConverted = 0;
+
+        switch (endingCurrency) {
+            case "EUR":
+                currencyConverted = startingAmount * currencies.get("EUR");
+                break;
+            case "GBP":
+                currencyConverted = startingAmount * currencies.get("EUR") * currencies.get("GBP");
+                break;
+        }
+
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        return df.format(currencyConverted);
     }
 }

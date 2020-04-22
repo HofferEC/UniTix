@@ -24,6 +24,7 @@ import java.util.HashMap;
 import androidx.appcompat.app.AppCompatDelegate;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.User;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Get sharedPreferences
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        // Need to update the currency rates at least daily
+        Utility.updateCurrencyRates();
 
         // Login with uid if user did not logout last time
         String storedUid = sharedPreferences.getString("USER", null);

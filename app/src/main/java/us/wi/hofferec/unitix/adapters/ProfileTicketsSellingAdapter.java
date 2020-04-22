@@ -10,7 +10,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.activities.LoginActivity;
 import us.wi.hofferec.unitix.data.Ticket;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class ProfileTicketsSellingAdapter extends RecyclerView.Adapter<ProfileTicketsSellingAdapter.TicketHolder> {
 
@@ -65,7 +67,17 @@ public class ProfileTicketsSellingAdapter extends RecyclerView.Adapter<ProfileTi
 
         ticketHolder.dateTextView.setText(tickets.get(position).getDate());
 
-        StringBuilder price = new StringBuilder("$" + tickets.get(position).getPrice());
+        StringBuilder price = new StringBuilder();
+
+        if (LoginActivity.user.getSettings().get("currency").equals("USD")){
+            price.append("$" + tickets.get(position).getPrice());
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
+            price.append("€" + Utility.convert(Double.parseDouble(tickets.get(position).getPrice()), "EUR"));
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
+            price.append("£" + Utility.convert(Double.parseDouble(tickets.get(position).getPrice()), "GBP"));
+        }
         ticketHolder.priceTextView.setText(price);
 
         ticketHolder.status.setText(tickets.get(position).isAvailable() ? "Selling" : "Sold");

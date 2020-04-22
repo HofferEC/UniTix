@@ -17,7 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.activities.ConfirmPurchaseActivity;
+import us.wi.hofferec.unitix.activities.LoginActivity;
 import us.wi.hofferec.unitix.data.Ticket;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHolder> {
 
@@ -67,7 +69,17 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
 
         ticketHolder.dateTextView.setText(ticket.getDate());
 
-        StringBuilder price = new StringBuilder("$" + ticket.getPrice());
+        StringBuilder price = new StringBuilder();
+
+        if (LoginActivity.user.getSettings().get("currency").equals("USD")){
+            price.append("$" + ticket.getPrice());
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
+            price.append("€" + Utility.convert(Double.parseDouble(ticket.getPrice()), "EUR"));
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
+            price.append("£" + Utility.convert(Double.parseDouble(ticket.getPrice()), "GBP"));
+        }
         ticketHolder.priceTextView.setText(price);
 
         ticketHolder.buyButton.setText(ticket.isAvailable() ? "Buy" : "Unavailable");
