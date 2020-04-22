@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         // Check if the user's tickets have been sold. If so, sends notification.
         if ((boolean) LoginActivity.user.getSettings().get("notifications"))
             Utility.checkForSoldTickets(getApplicationContext(), "MainActivity", LoginActivity.user);
+
+        setupImageFlipper();
 
     }
 
@@ -56,5 +59,13 @@ public class MainActivity extends AppCompatActivity {
             // (See MyAppGlideModule for Loader registration)
             Glide.with(this).load(LoginActivity.user.getProfileImageUri()).apply(RequestOptions.circleCropTransform()).into(profileImage);
         }
+    }
+
+    public void setupImageFlipper(){
+        ViewFlipper flipper = findViewById(R.id.vf_main);
+        flipper.setFlipInterval(5000);
+        flipper.setInAnimation(this, R.anim.fui_slide_in_right);
+        flipper.setOutAnimation(this, R.anim.fui_slide_out_left);
+        flipper.startFlipping();
     }
 }

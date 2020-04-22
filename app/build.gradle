@@ -53,4 +53,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:converter-scalars:2.8.1'
     implementation 'com.google.android.gms:play-services-wallet:18.0.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 }
