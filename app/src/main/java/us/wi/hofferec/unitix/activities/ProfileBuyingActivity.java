@@ -75,10 +75,13 @@ public class ProfileBuyingActivity extends AppCompatActivity {
                         if (document.exists()) {
                             List<DocumentReference> list = (List<DocumentReference>) document.get("ticketsBuying");
                             List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
-                            for (DocumentReference documentReference : list) {
-                                Task<DocumentSnapshot> documentSnapshotTask = documentReference.get();
-                                tasks.add(documentSnapshotTask);
+                            if (list != null) {
+                                for (DocumentReference documentReference : list) {
+                                    Task<DocumentSnapshot> documentSnapshotTask = documentReference.get();
+                                    tasks.add(documentSnapshotTask);
+                                }
                             }
+
                             // Only move to the next step when all data is loaded
                             Tasks.whenAllSuccess(tasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
                                 @Override
