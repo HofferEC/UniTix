@@ -75,7 +75,7 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
         setContentView(R.layout.confirm_purchase);
 
         TextView ticketInfo = (TextView) findViewById(R.id.ticketInfoTextView);
-
+        
         ticketInfo.append("Event: " + ticket.getEvent() + "\n\n");
         ticketInfo.append("Teams: " + ticket.getAwayTeam() + " @ " + ticket.getHomeTeam() + "\n\n");
         ticketInfo.append("Date: " + ticket.getDate() + "\n\n");
