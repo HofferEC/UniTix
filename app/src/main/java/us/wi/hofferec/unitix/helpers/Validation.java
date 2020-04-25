@@ -7,7 +7,8 @@ import android.widget.Toast;
 public class Validation {
 
     // Validates each string of the Ticket listing. Returns false if at least one field is invalid
-    public static boolean validateTicket(Context context, String date, String event, String home, String away, String price){
+    public static boolean validateTicket(Context context, String date, String event, String home,
+                                         String away, String price, String path){
         if (!validateDate(date)){
             Log.e("VALIDATION", "Date invalid: " + date);
             Toast.makeText(context, "Please enter a valid date\nFormat: mm/dd/yyyy", Toast.LENGTH_LONG).show();
@@ -33,12 +34,17 @@ public class Validation {
             Toast.makeText(context, "Please enter a valid price\nBetween .01-9999", Toast.LENGTH_LONG).show();
             return false;
         }
+        if (!validatePath(path)){
+            Log.e("VALIDATION", "File invalid: " + path);
+            Toast.makeText(context, "Please enter a valid ticket file.\nMust be a PDF.", Toast.LENGTH_LONG).show();
+            return false;
+        }
 
         return true;
     }
 
     // Input validation for a date string
-    public static boolean validateDate(String date){
+    private static boolean validateDate(String date){
         String [] parts = date.split("/");
         if (parts.length != 3) return false;
         try {
@@ -55,12 +61,12 @@ public class Validation {
     }
 
     // Input validation for the strings (i.e. Home Team, Away Team, Events)
-    public static boolean validateStrings(String event) {
+    private static boolean validateStrings(String event) {
         return (event.length() > 0 && event.length() < 64);
     }
 
     // Input validation for the price field.
-    public static boolean validatePrice(String priceString) {
+    private static boolean validatePrice(String priceString) {
         try {
             float price = Float.parseFloat(priceString);
             if (price < .01 || price > 9999)
@@ -71,5 +77,10 @@ public class Validation {
             return false;
         }
         return true;
+    }
+
+    // Input validation for the path
+    private static boolean validatePath(String path) {
+        return (path != null && path.length() > 0 && path.endsWith(".pdf"));
     }
 }

@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="postTicket"
+            android:onClick="initiateTicketPost"
             android:text="Post" />
     </LinearLayout>
 
@@ -238,6 +238,34 @@
                 android:inputType="numberDecimal"
                 android:textAppearance="@style/Theme.AppCompat.DayNight"
                 android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_sell_ticket_file_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
+                android:text="Ticket .pdf File:"
+                android:textAppearance="@style/Theme.AppCompat.DayNight"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_ticket_URI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ticket file path"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <Button
+                android:id="@+id/btn_select_ticket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="selectTicketFile"
+                android:text="Choose Ticket File"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>
     </ScrollView>

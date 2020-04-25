@@ -18,6 +18,7 @@ public class Ticket implements Serializable {
     private String price;
     private boolean available;
     private String uid;
+    private String ticketPath;
     private boolean seen;
 
     /**
@@ -63,6 +64,23 @@ public class Ticket implements Serializable {
      */
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    /**
+     * Getter for ticketPath.
+     *
+     * @return current ticketPath
+     */
+    public String getTicketPath() {
+        return ticketPath;
+    }
+
+    /**
+     * Setter for ticketPath.
+     * @param ticketPath ticketPath to set
+     */
+    public void setTicketPath(String ticketPath) {
+        this.ticketPath = ticketPath;
     }
 
     /**

@@ -42,6 +42,7 @@ public class TicketPostedActivity extends AppCompatActivity {
         ticket.setEvent(bundle.getString("event"));
         ticket.setPrice(bundle.getString("price"));
         ticket.setAvailable(bundle.getBoolean("available"));
+        ticket.setTicketPath(bundle.getString("ticketPath"));
 
         // Add the ticket to the tickets database as well as associate it with the user
         Utility.addTicketToDatabaseAndUser("TicketPostedActivity", ticket, "selling");

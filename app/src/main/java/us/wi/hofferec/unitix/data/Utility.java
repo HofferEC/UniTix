@@ -1,7 +1,13 @@
 package us.wi.hofferec.unitix.data;
 
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -10,16 +16,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +40,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import us.wi.hofferec.unitix.activities.LoginActivity;
+import us.wi.hofferec.unitix.activities.PDFViewerActivity;
 import us.wi.hofferec.unitix.helpers.Notifications;
 import us.wi.hofferec.unitix.interfaces.CurrencyInterface;
 
@@ -41,6 +55,7 @@ public class Utility {
 
     // Collection that stores our ticket information
     private static final String TICKETS_COLLECTION = "tickets";
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
     private static Map<String, Double> currencies;
 
@@ -71,6 +86,7 @@ public class Utility {
                     }
                 });
     }
+
 
     /**
      * Updates a ticket in the tickets database.
@@ -267,5 +283,68 @@ public class Utility {
         DecimalFormat df = new DecimalFormat("#.##");
 
         return df.format(currencyConverted);
+    }
+
+    /**
+     * Downloads a given ticket to the user device
+     *
+     * @param context the context of the calling activity
+     * @param TAG class associated with the update
+     * @param TAG ticketFilepath the ticket to download
+     */
+    public static void downloadTicket(final Context context, final String TAG, final String ticketFilepath) {
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference ticketReference = storage.getReference(ticketFilepath);
+        Log.i(TAG, "Downloading ticket: " + ticketFilepath);
+
+        File downloadLocation;
+        Log.i(TAG, "Ticket details: " + ticketReference.getBucket() + " " + ticketReference.getName() + " " + ticketReference.getPath());
+
+        downloadLocation = new File(context.getExternalFilesDir(null), ticketReference.getName() + ".pdf");
+        Log.i(TAG, "Download location is: " + downloadLocation.getAbsolutePath());
+
+        ticketReference.getFile(downloadLocation)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        Log.i(TAG, "Ticket download complete!");
+                        Toast.makeText(context, "Downloaded", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                  @Override
+                  public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(context, "Failed to download: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to downloading ticket: " + ticketFilepath);
+                    Log.e(TAG, e.toString());
+                    Log.e(TAG, this.toString());
+                  }
+                })
+                .addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Log.i(TAG, "Ticket download progress update");
+
+                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            .getTotalByteCount());
+                    }
+                });
+    }
+
+    public static void openTicket(Context context, String TAG, String ticketFileUUID) {
+        Log.e(TAG, "Opening ticket :" + ticketFileUUID);
+        File f = new File(context.getExternalFilesDir(null), ticketFileUUID + ".pdf");
+        if (!f.exists()){
+            Log.e(TAG, "File does not exist! Downloading now.");
+            downloadTicket(context, TAG, ticketFileUUID);
+            return;
+        }
+
+        Log.e(TAG, "TICKET exists :" + ticketFileUUID);
+        Intent target = new Intent(context, PDFViewerActivity.class);
+        target.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        target.putExtra("filepath", f.getPath());
+        context.startActivity(target);
     }
 }

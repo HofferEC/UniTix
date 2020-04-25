@@ -5,16 +5,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".helpers.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activities.PDFViewerActivity"></activity>
         <activity android:name=".activities.TicketPostedActivity" />
         <activity android:name=".activities.TicketPurchasedActivity" />
         <activity android:name=".activities.SellTicketActivity" />
@@ -25,12 +27,13 @@
         <activity android:name=".activities.ProfileSellingActivity" />
         <activity android:name=".activities.ProfileBuyingActivity" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.SettingsActivity"
+        <activity
+            android:name=".activities.SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".activities.ProfileActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.ProfileActivity"/>
+                android:value=".activities.ProfileActivity" />
         </activity>
         <activity android:name=".fragments.SettingsFragment" />
         <activity android:name=".activities.LoginActivity">
@@ -39,9 +42,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Enabling this flag is required in order to use the PaymentsClient -->
+        </activity> <!-- Enabling this flag is required in order to use the PaymentsClient -->
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />

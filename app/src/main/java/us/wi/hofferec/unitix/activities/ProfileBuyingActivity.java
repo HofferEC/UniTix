@@ -1,5 +1,9 @@
 package us.wi.hofferec.unitix.activities;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,17 +24,18 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.adapters.ProfileTicketsSellingAdapter;
+import us.wi.hofferec.unitix.adapters.ProfileTicketsBuyingAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class ProfileBuyingActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ProfileTicketsSellingAdapter adapter;
+    private ProfileTicketsBuyingAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
 
@@ -39,6 +44,7 @@ public class ProfileBuyingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_buying);
 
+        checkPerms("ProfileBuyingActivity");
         setupRecyclerView();
     }
 
@@ -64,6 +70,8 @@ public class ProfileBuyingActivity extends AppCompatActivity {
 
         // Save the data
         final List<Ticket> data = new ArrayList<>();
+
+        final Context context = getApplicationContext();
 
         if (firebaseUser != null) {
             String uid = firebaseUser.getUid();
@@ -95,7 +103,7 @@ public class ProfileBuyingActivity extends AppCompatActivity {
                                     }
                                     Log.i("ProfileBuyingActivity", "Successfully loaded " + list.size() + " ticket for user: " + firebaseUser.getUid());
 
-                                    adapter = new ProfileTicketsSellingAdapter(data);
+                                    adapter = new ProfileTicketsBuyingAdapter(data, context);
                                     recyclerView.setAdapter(adapter);
 
                                 }
@@ -105,6 +113,35 @@ public class ProfileBuyingActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            Log.v("ProfileBuyingActivity","Permission: "+permissions[0]+ "was "+grantResults[0]);
+            //resume tasks needing this permission
+        }
+    }
+
+    private void checkPerms(String TAG) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Write permission is granted");
+            } else {
+
+                Log.v(TAG,"Write permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Write permission is granted automatically due to SDK");
+        }
+    }
+
+    public void openTicket(String ticket){
+
     }
 
     public void goBack(View view){

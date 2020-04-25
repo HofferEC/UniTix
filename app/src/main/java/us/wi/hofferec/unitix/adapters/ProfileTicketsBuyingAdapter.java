@@ -1,6 +1,6 @@
 package us.wi.hofferec.unitix.adapters;
 
-import android.content.Intent;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +12,14 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
-import us.wi.hofferec.unitix.activities.ConfirmPurchaseActivity;
 import us.wi.hofferec.unitix.activities.LoginActivity;
 import us.wi.hofferec.unitix.data.Ticket;
 import us.wi.hofferec.unitix.data.Utility;
 
-public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHolder> {
+public class ProfileTicketsBuyingAdapter extends RecyclerView.Adapter<ProfileTicketsBuyingAdapter.TicketHolder> {
 
-    private List<Ticket> ticketsList;
+    private List<Ticket> tickets;
+    private Context context;
 
     /**
      * Provides a direct reference to each of the views within a data item and caches the views
@@ -31,7 +31,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
         public TextView infoTextView;
         public TextView dateTextView;
         public TextView priceTextView;
-        public Button buyButton;
+        public Button viewButton;
 
         /**
          * Constructor that accepts the entire item row and does the view lookups to find each
@@ -45,62 +45,59 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
             infoTextView = itemView.findViewById(R.id.tv_details_info);
             dateTextView = itemView.findViewById(R.id.tv_details_date);
             priceTextView = itemView.findViewById(R.id.tv_details_price);
-            buyButton = itemView.findViewById(R.id.action_button);
+            viewButton = itemView.findViewById(R.id.action_button);
         }
     }
 
-    public TicketAdapter(List<Ticket> tickets) {
-        this.ticketsList = tickets;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull TicketHolder ticketHolder, int position) {
-
-        final Ticket ticket = ticketsList.get(position);
-
-        ticketHolder.eventTextView.setText(ticket.getEvent());
-
-        StringBuilder info = new StringBuilder(ticket.getAwayTeam() + "\n@ " + ticket.getHomeTeam());
-        ticketHolder.infoTextView.setText(info);
-
-        ticketHolder.dateTextView.setText(ticket.getDate());
-
-        StringBuilder price = new StringBuilder();
-
-        if (LoginActivity.user.getSettings().get("currency").equals("USD")){
-            price.append("$" + ticket.getPrice());
-        }
-        else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
-            price.append("€" + Utility.convert(Double.parseDouble(ticket.getPrice()), "EUR"));
-        }
-        else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
-            price.append("£" + Utility.convert(Double.parseDouble(ticket.getPrice()), "GBP"));
-        }
-        ticketHolder.priceTextView.setText(price);
-
-        ticketHolder.buyButton.setText(ticket.isAvailable() ? "Buy" : "Unavailable");
-        ticketHolder.buyButton.setEnabled(ticket.isAvailable());
-
-        ticketHolder.buyButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ConfirmPurchaseActivity.class);
-                intent.putExtra("ticket", ticket);
-                view.getContext().startActivity(intent);
-            }
-        });
-
+    public ProfileTicketsBuyingAdapter(List<Ticket> tickets, Context context) {
+        this.tickets = tickets;
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public TicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ProfileTicketsBuyingAdapter.TicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ticket, parent, false);
-        return new TicketHolder(view);
+        return new ProfileTicketsBuyingAdapter.TicketHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final TicketHolder ticketHolder, int position) {
+
+        ticketHolder.eventTextView.setText(tickets.get(position).getEvent());
+
+        StringBuilder info = new StringBuilder(tickets.get(position).getAwayTeam() + " @ " + tickets.get(position).getHomeTeam());
+        ticketHolder.infoTextView.setText(info);
+
+        ticketHolder.dateTextView.setText(tickets.get(position).getDate());
+
+        StringBuilder price = new StringBuilder();
+
+        if (LoginActivity.user.getSettings().get("currency").equals("USD")){
+            price.append("$" + tickets.get(position).getPrice());
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
+            price.append("€" + Utility.convert(Double.parseDouble(tickets.get(position).getPrice()), "EUR"));
+        }
+        else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
+            price.append("£" + Utility.convert(Double.parseDouble(tickets.get(position).getPrice()), "GBP"));
+        }
+        ticketHolder.priceTextView.setText(price);
+
+        ticketHolder.viewButton.setText("View");
+        ticketHolder.viewButton.setOnClickListener(v -> {
+            showTicket(position);
+        });
+    }
+
+    private void showTicket(int position) {
+        Ticket t = tickets.get(position);
+        String filepath = t.getTicketPath().replace("/tickets/", "");
+        Utility.openTicket(context, "ProfileBuyingAdapter", filepath);
     }
 
     @Override
     public int getItemCount() {
-        return ticketsList.size();
+        return tickets.size();
     }
-
 }
