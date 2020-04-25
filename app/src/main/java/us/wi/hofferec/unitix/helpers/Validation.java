@@ -36,7 +36,7 @@ public class Validation {
         }
         if (!validatePath(path)){
             Log.e("VALIDATION", "File invalid: " + path);
-            Toast.makeText(context, "Please enter a valid ticket file.\nMust be a PDF.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please enter a valid ticket file.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -81,6 +81,6 @@ public class Validation {
 
     // Input validation for the path
     private static boolean validatePath(String path) {
-        return (path != null && path.length() > 0 && path.endsWith(".pdf"));
+        return (path != null && path.length() > 0);
     }
 }
