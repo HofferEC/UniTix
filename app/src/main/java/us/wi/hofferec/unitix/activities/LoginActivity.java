@@ -135,10 +135,10 @@ public class LoginActivity extends AppCompatActivity {
                                 // Map the data from the document to the user object
                                 user = document.toObject(User.class);
 
-                                Log.d("LoginActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
+                                Log.i("LoginActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
                             }
                             else {
-                                Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
+                                Log.w("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
 
                                 // Get the current authenticated users email and name
                                 String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
 
                         } else {
-                            Log.d("LoginActivity", "accessing database failed with ", task.getException());
+                            Log.e("LoginActivity", "accessing database failed with ", task.getException());
                         }
                     }
                 });
@@ -199,10 +199,10 @@ public class LoginActivity extends AppCompatActivity {
                                 // Map the data from the document to the user object
                                 user = document.toObject(User.class);
 
-                                Log.d("LoginActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
+                                Log.i("LoginActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
                             }
                             else {
-                                Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
+                                Log.w("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
 
                                 // Get the current authenticated users email and name
                                 String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -232,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
 
                         } else {
-                            Log.d("LoginActivity", "accessing database failed with ", task.getException());
+                            Log.e("LoginActivity", "accessing database failed with ", task.getException());
                         }
                     }
                 });

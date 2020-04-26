@@ -119,7 +119,7 @@ public class ProfileBuyingActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            Log.v("ProfileBuyingActivity","Permission: "+permissions[0]+ "was "+grantResults[0]);
+            Log.i("ProfileBuyingActivity","Permission: "+permissions[0]+ " was "+grantResults[0]);
             //resume tasks needing this permission
         }
     }
@@ -128,15 +128,15 @@ public class ProfileBuyingActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG,"Write permission is granted");
+                Log.i(TAG,"Write permission is granted");
             } else {
 
-                Log.v(TAG,"Write permission is revoked");
+                Log.e(TAG,"Write permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
         else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG,"Write permission is granted automatically due to SDK");
+            Log.i(TAG,"Write permission is granted automatically due to SDK");
         }
     }
 

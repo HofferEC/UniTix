@@ -3,6 +3,7 @@ package us.wi.hofferec.unitix.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class ProfileTicketsSellingAdapter extends RecyclerView.Adapter<ProfileTi
         public TextView dateTextView;
         public TextView priceTextView;
         public TextView status;
+        public Button retractButton;
 
         /**
          * Constructor that accepts the entire item row and does the view lookups to find each
@@ -43,6 +45,7 @@ public class ProfileTicketsSellingAdapter extends RecyclerView.Adapter<ProfileTi
             dateTextView = itemView.findViewById(R.id.tv_details_profile_date);
             priceTextView = itemView.findViewById(R.id.tv_details_profile_price);
             status = itemView.findViewById(R.id.tv_details_profile_status);
+            retractButton = itemView.findViewById(R.id.button_details_profile_retract);
         }
     }
 
@@ -58,7 +61,7 @@ public class ProfileTicketsSellingAdapter extends RecyclerView.Adapter<ProfileTi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final TicketHolder ticketHolder, int position) {
+    public void onBindViewHolder(@NonNull final TicketHolder ticketHolder, final int position) {
 
         ticketHolder.eventTextView.setText(tickets.get(position).getEvent());
 
@@ -80,7 +83,18 @@ public class ProfileTicketsSellingAdapter extends RecyclerView.Adapter<ProfileTi
         }
         ticketHolder.priceTextView.setText(price);
 
-        ticketHolder.status.setText(tickets.get(position).isAvailable() ? "Selling" : "Sold");
+        if (tickets.get(position).isAvailable()) {
+            ticketHolder.status.setVisibility(View.GONE);
+            ticketHolder.retractButton.setText("Retract");
+            ticketHolder.retractButton.setOnClickListener(v -> {
+                tickets.get(position).setAvailable(false);
+                tickets.get(position).setRetracted(true);
+                Utility.updateTicketOnDatabase("ProfileTicketsSellingAdapter", tickets.get(position));
+            });
+        } else {
+            ticketHolder.retractButton.setVisibility(View.GONE);
+            ticketHolder.status.setText(tickets.get(position).isRetracted() ? "Retracted" : "Sold");
+        }
     }
 
     @Override

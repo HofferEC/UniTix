@@ -32,6 +32,7 @@ import us.wi.hofferec.unitix.data.Utility;
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profileImage;
+    private TextView emailTV;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -41,6 +42,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Get sharedPreferences
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        emailTV = findViewById(R.id.tv_profile_email);
+        emailTV.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         profileImage = findViewById(R.id.iv_profile_profile);
         TextView tv_username = (findViewById(R.id.tv_profile_username));
@@ -137,12 +141,12 @@ public class ProfileActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "Error adding image: " + imageUUID + " to cloud storage");
+                Log.e(TAG, "Error adding image: " + imageUUID + " to cloud storage");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.d(TAG, "Successfully added image: " + imageUUID + " to cloud storage");
+                Log.i(TAG, "Successfully added image: " + imageUUID + " to cloud storage");
 
                 storage.getReference().child("Profile Images/" + imageUUID).getDownloadUrl()
                         .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -157,7 +161,7 @@ public class ProfileActivity extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
-                                Log.d(TAG, "Error retrieving uri for image: " + imageUUID + " in cloud storage, " + exception.getMessage());
+                                Log.e(TAG, "Error retrieving uri for image: " + imageUUID + " in cloud storage, " + exception.getMessage());
                             }
                         });
             }

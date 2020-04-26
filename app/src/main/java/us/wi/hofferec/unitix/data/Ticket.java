@@ -17,6 +17,7 @@ public class Ticket implements Serializable {
     private String event;
     private String price;
     private boolean available;
+    private boolean retracted;
     private String uid;
     private String ticketPath;
     private boolean seen;
@@ -37,12 +38,13 @@ public class Ticket implements Serializable {
      * @param available is the ticket available
      * @param price price
      */
-    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean available, String price, String uid) {
+    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean available, boolean retracted, String price, String uid) {
         this.date = date;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.event = event;
         this.available = available;
+        this.retracted = retracted;
         this.price = price;
         this.uid = uid;
         this.seen = false;
@@ -134,6 +136,24 @@ public class Ticket implements Serializable {
      */
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    /**
+     * Getter for retracted.
+     *
+     * @return current retracted
+     */
+    public boolean isRetracted() {
+        return retracted;
+    }
+
+    /**
+     * Setter for retracted.
+     *
+     * @param retracted retracted to set
+     */
+    public void setRetracted(boolean retracted) {
+        this.retracted = retracted;
     }
 
     /**
@@ -230,6 +250,7 @@ public class Ticket implements Serializable {
         String date = dateFormat.format(today);
         double isAvailableRand;
         boolean isAvailable;
+        boolean isRetracted;
         String price = "10.35";
         String uid = "0";
 
@@ -239,7 +260,8 @@ public class Ticket implements Serializable {
             eventsRand = getRandomIntegerBetweenRange(0, events.length - 1);
             isAvailableRand = getRandomIntegerBetweenRange(0, 1);
             isAvailable = isAvailableRand == 1;
-            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable, price, uid);
+            isRetracted = false;
+            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable, isRetracted, price, uid);
             tickets.add(ticket);
         }
 
