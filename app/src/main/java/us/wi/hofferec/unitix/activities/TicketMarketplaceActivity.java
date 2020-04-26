@@ -2,6 +2,8 @@ package us.wi.hofferec.unitix.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -97,23 +99,23 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
 
         // Setup the search box for filtering the tickets list
         final EditText et_search = findViewById(R.id.et_find_ticket_search);
-        et_search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
 
-              // When focus is lost check that the text field has valid values.
-              if (!hasFocus) {
-                 String filterText = et_search.getText().toString();
-                 if (!filterText.isEmpty()) {
-                     Log.i("TicketMarketplace", "Searching tickets for text: " + filterText);
-                     List<Ticket> searchedTickets = searchTicketsForText(filterText);
-                     fillRecyclerView(searchedTickets);
-                 } else { // If search field empty, reset list to all items
-                     fillRecyclerView(ticketsList);
-                 }
-              }
+        et_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
-         });
+
+            @Override
+            public void onTextChanged(CharSequence filterText, int i, int i1, int i2) {
+                Log.i("TicketMarketplace", "Searching tickets for text: " + filterText);
+                List<Ticket> searchedTickets = searchTicketsForText(filterText.toString());
+                fillRecyclerView(searchedTickets);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         setupRecyclerView();
     }
