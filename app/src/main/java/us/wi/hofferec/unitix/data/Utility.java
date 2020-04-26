@@ -315,29 +315,22 @@ public class Utility {
                 .addOnFailureListener(new OnFailureListener() {
                   @Override
                   public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "Failed to download: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Failed to downloading ticket: " + ticketFilepath);
+                    Toast.makeText(context, "Failed to download: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to download ticket: " + ticketFilepath);
                     Log.e(TAG, e.toString());
                     Log.e(TAG, this.toString());
                   }
-                })
-                .addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Log.i(TAG, "Ticket download progress update");
-
-                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                            .getTotalByteCount());
-                    }
                 });
     }
 
-    public static void openTicket(Context context, String TAG, String ticketFileUUID) {
-        Log.e(TAG, "Opening ticket :" + ticketFileUUID);
+    public static void openTicket(Context context, String TAG, String ticketFilepath) {
+        String ticketFileUUID = ticketFilepath.replace("/tickets/","");
+        Log.e(TAG, "Opening ticket :" + ticketFilepath);
         File f = new File(context.getExternalFilesDir(null), ticketFileUUID + ".pdf");
         if (!f.exists()){
             Log.e(TAG, "File does not exist! Downloading now.");
-            downloadTicket(context, TAG, ticketFileUUID);
+            Toast.makeText(context, "Downloading ticket data\nfrom server.", Toast.LENGTH_SHORT).show();
+            downloadTicket(context, TAG, ticketFilepath);
             return;
         }
 

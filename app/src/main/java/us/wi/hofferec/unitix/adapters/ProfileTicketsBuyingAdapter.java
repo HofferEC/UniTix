@@ -92,7 +92,7 @@ public class ProfileTicketsBuyingAdapter extends RecyclerView.Adapter<ProfileTic
 
     private void showTicket(int position) {
         Ticket t = tickets.get(position);
-        String filepath = t.getTicketPath().replace("/tickets/", "");
+        String filepath = t.getTicketPath();
         Utility.openTicket(context, "ProfileBuyingAdapter", filepath);
     }
 

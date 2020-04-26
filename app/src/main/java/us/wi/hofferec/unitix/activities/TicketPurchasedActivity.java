@@ -73,7 +73,7 @@ public class TicketPurchasedActivity extends AppCompatActivity {
 
     // Opens the ticket .pdf
     public void openTicket(View view) {
-        Utility.openTicket(this, "TicketPurchasedActivity", ticket.getTicketPath().replace("/tickets/", ""));
+        Utility.openTicket(this, "TicketPurchasedActivity", ticket.getTicketPath());
     }
 
     public void goToHome(View view){
