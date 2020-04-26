@@ -22,6 +22,7 @@
         <activity android:name=".activities.SellTicketActivity" />
         <activity android:name=".activities.TicketMarketplaceActivity" />
         <activity android:name=".activities.ConfirmPurchaseActivity" />
+        <activity android:name=".activities.ConfirmRetractionActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.ProfileSellingActivity" />
