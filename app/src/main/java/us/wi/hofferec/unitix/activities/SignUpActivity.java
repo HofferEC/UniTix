@@ -30,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
+    private EditText usernameEditText;
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private final String COLLECTION = "users";
     private CollectionReference collectionReference;
@@ -46,6 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.et_signup_email);
         passwordEditText = findViewById(R.id.et_signup_password);
         confirmPasswordEditText = findViewById(R.id.et_signup_confirm_password);
+        usernameEditText = findViewById(R.id.et_signup_name);
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -62,6 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String confirmPassword = confirmPasswordEditText.getText().toString();
+        String username = usernameEditText.getText().toString();
 
         if (!password.equals(confirmPassword)) {
             confirmPasswordEditText.setError("Passwords are not the same");
@@ -72,6 +75,9 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (password.isEmpty()) {
             passwordEditText.setError("Please enter a password");
             passwordEditText.requestFocus();
+        } else if (username.length() < 3 || username.length() > 16) {
+            usernameEditText.setError("Username must have [3-16] characters");
+            usernameEditText.requestFocus();
         } else {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -83,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
                             } else {
 
                                 // Add new user to users database
-                                addUserToDatabase();
+                                addUserToDatabase(username);
                             }
                         }
                     });
@@ -93,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
     /**
      * Retrieve the user information from the database before going to the main screen.
      */
-    public void addUserToDatabase() {
+    public void addUserToDatabase(String username) {
 
         // Database context
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -119,7 +125,7 @@ public class SignUpActivity extends AppCompatActivity {
                             settings.put("currency", "USD");
 
                             // Create document for this user
-                            LoginActivity.user = new User(email, settings);
+                            LoginActivity.user = new User(email, settings, username);
 
                             final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

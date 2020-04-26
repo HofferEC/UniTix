@@ -140,8 +140,9 @@ public class LoginActivity extends AppCompatActivity {
                             else {
                                 Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
 
-                                // Get the current authenticated users email
+                                // Get the current authenticated users email and name
                                 String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                                String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
                                 // Settings template
                                 HashMap<String, Object> settings = new HashMap<>();
@@ -150,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                                 settings.put("currency", "USD");
 
                                 // Create document for this user
-                                user = new User(email, settings);
+                                user = new User(email, settings, username);
 
                                 final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -203,8 +204,9 @@ public class LoginActivity extends AppCompatActivity {
                             else {
                                 Log.d("LoginActivity", "Unable to find document for user: " + userUID + ", creating document now");
 
-                                // Get the current authenticated users email
+                                // Get the current authenticated users email and name
                                 String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                                String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
                                 // Settings template
                                 HashMap<String, Object> settings = new HashMap<>();
@@ -213,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
                                 settings.put("currency", "USD");
 
                                 // Create document for this user
-                                user = new User(email, settings);
+                                user = new User(email, settings, username);
 
                                 final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

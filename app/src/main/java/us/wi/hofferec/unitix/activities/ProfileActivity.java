@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -42,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
         profileImage = findViewById(R.id.iv_profile_profile);
+        TextView tv_username = (findViewById(R.id.tv_profile_username));
+        tv_username.setText(LoginActivity.user.getUsername());
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
