@@ -134,12 +134,12 @@ public class ProfileActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "Error adding image: " + imageUUID + " to cloud storage");
+                Log.e(TAG, "Error adding image: " + imageUUID + " to cloud storage");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.d(TAG, "Successfully added image: " + imageUUID + " to cloud storage");
+                Log.i(TAG, "Successfully added image: " + imageUUID + " to cloud storage");
 
                 storage.getReference().child("Profile Images/" + imageUUID).getDownloadUrl()
                         .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -154,7 +154,7 @@ public class ProfileActivity extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
-                                Log.d(TAG, "Error retrieving uri for image: " + imageUUID + " in cloud storage, " + exception.getMessage());
+                                Log.e(TAG, "Error retrieving uri for image: " + imageUUID + " in cloud storage, " + exception.getMessage());
                             }
                         });
             }

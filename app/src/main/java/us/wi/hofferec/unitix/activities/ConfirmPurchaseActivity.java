@@ -1,10 +1,8 @@
 package us.wi.hofferec.unitix.activities;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -156,7 +154,7 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             setGooglePayAvailable(task.getResult());
                         } else {
-                            Log.w("isReadyToPay failed", task.getException());
+                            Log.e("isReadyToPay failed", task.getException().getMessage());
                         }
                     }
                 });
@@ -219,7 +217,7 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
 
             // Logging token string.
-            Log.d("Google Pay token: ", token);
+            Log.i("Google Pay token: ", token);
 
             Intent intent = new Intent(getApplicationContext(), TicketPurchasedActivity.class);
             intent.putExtra("ticket", ticket);
@@ -250,7 +248,7 @@ public class ConfirmPurchaseActivity extends AppCompatActivity {
      * WalletConstants#constant-summary">Wallet Constants Library</a>
      */
     private void handleError(int statusCode) {
-        Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode));
+        Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

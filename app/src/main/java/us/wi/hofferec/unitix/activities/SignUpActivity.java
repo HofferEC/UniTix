@@ -79,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(!task.isSuccessful()) {
                                 Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d("SignUpActivity.signUp()", "Unable create user given exception: " + task.getException());
+                                Log.e("SignUpActivity.signUp()", "Unable create user given exception: " + task.getException());
                             } else {
 
                                 // Add new user to users database

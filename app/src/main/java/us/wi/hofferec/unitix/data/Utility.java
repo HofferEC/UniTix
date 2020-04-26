@@ -1,11 +1,7 @@
 package us.wi.hofferec.unitix.data;
 
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,26 +14,22 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import us.wi.hofferec.unitix.activities.LoginActivity;
 import us.wi.hofferec.unitix.activities.PDFViewerActivity;
@@ -76,13 +68,13 @@ public class Utility {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully updated database information for user: " + LoginActivity.user.getEmail());
+                        Log.i(TAG, "Successfully updated database information for user: " + LoginActivity.user.getEmail());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating database information for user: " + LoginActivity.user.getEmail(), e);
+                        Log.e(TAG, "Error updating database information for user: " + LoginActivity.user.getEmail(), e);
                     }
                 });
     }
@@ -105,13 +97,13 @@ public class Utility {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully updated database information for ticket: " + ticket.getUid());
+                        Log.i(TAG, "Successfully updated database information for ticket: " + ticket.getUid());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating database information for ticket: " + ticket.getUid(), e);
+                        Log.e(TAG, "Error updating database information for ticket: " + ticket.getUid(), e);
                     }
                 });
     }
@@ -133,7 +125,7 @@ public class Utility {
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "Successfully added ticket " + documentReference.getId() + " to database");
+                            Log.i(TAG, "Successfully added ticket " + documentReference.getId() + " to database");
 
                             // Assign UID to ticket
                             ticket.setUid(documentReference.getId());
@@ -151,7 +143,7 @@ public class Utility {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error adding ticket to database", e);
+                            Log.e(TAG, "Error adding ticket to database", e);
                         }
                     });
         }
@@ -215,7 +207,7 @@ public class Utility {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.body() != null) {
-                    Log.i("Utility/updateCurrency", "Successfully received currency response");
+                    Log.i("Utility/updateCurrency", "Successfully received currency response from " + CurrencyInterface.BASE_URL);
                     String jsonResponse = response.body();
 
                     writeJsonToCurrency(jsonResponse);
@@ -240,20 +232,16 @@ public class Utility {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
-            if (jsonObject.optString("success").equals("true")) {
+            // Data structure to hold all our currencies
+            currencies = new HashMap<>();
 
-                // Data structure to hold all our currencies
-                currencies = new HashMap<>();
+            JSONObject allCurrencies = jsonObject.getJSONObject("rates");
 
-                JSONObject allCurrencies = jsonObject.getJSONObject("rates");
+            currencies.put("EUR", 1/Double.parseDouble(allCurrencies.get("USD").toString()));
+            Log.i("Utility/readCurrency", "Successfully read EUR exchange rate");
 
-                currencies.put("EUR", 1/Double.parseDouble(allCurrencies.get("USD").toString()));
-                Log.i("Utility/readCurrency", "Successfully read EUR exchange rate");
-
-                currencies.put("GBP", Double.parseDouble(allCurrencies.get("GBP").toString()));
-                Log.i("Utility/readCurrency", "Successfully read GBP exchange rate");
-
-            }
+            currencies.put("GBP", Double.parseDouble(allCurrencies.get("GBP").toString()));
+            Log.i("Utility/readCurrency", "Successfully read GBP exchange rate");
         }
         catch (JSONException e) {
             Log.e("Utility/writeCurrency", "Error pulling currencies out of json");
@@ -325,16 +313,16 @@ public class Utility {
 
     public static void openTicket(Context context, String TAG, String ticketFilepath) {
         String ticketFileUUID = ticketFilepath.replace("/tickets/","");
-        Log.e(TAG, "Opening ticket :" + ticketFilepath);
+        Log.i(TAG, "Opening ticket :" + ticketFilepath);
         File f = new File(context.getExternalFilesDir(null), ticketFileUUID + ".pdf");
         if (!f.exists()){
-            Log.e(TAG, "File does not exist! Downloading now.");
+            Log.i(TAG, "File does not exist! Downloading now.");
             Toast.makeText(context, "Downloading ticket data\nfrom server.", Toast.LENGTH_SHORT).show();
             downloadTicket(context, TAG, ticketFilepath);
             return;
         }
 
-        Log.e(TAG, "TICKET exists :" + ticketFileUUID);
+        Log.i(TAG, "TICKET exists :" + ticketFileUUID);
         Intent target = new Intent(context, PDFViewerActivity.class);
         target.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         target.putExtra("filepath", f.getPath());
