@@ -31,9 +31,10 @@ public class User {
      *
      * @param email email
      */
-    public User(String email, HashMap<String, Object> settings) {
+    public User(String email, HashMap<String, Object> settings, String username) {
         this.email = email;
         this.settings = settings;
+        this.username = username;
     }
 
     /**

@@ -28,7 +28,7 @@
         android:maxWidth="150dp"
         android:maxHeight="150dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/tv_profile_activity"
+        app:layout_constraintBottom_toTopOf="@+id/tv_profile_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,13 +50,14 @@
         app:srcCompat="@drawable/ic_home_black_24dp" />
 
     <TextView
-        android:id="@+id/tv_profile_activity"
+        android:id="@+id/tv_profile_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="Activity"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="Username"
+        android:textColor="@color/colorAccent"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_buying"
@@ -75,24 +76,24 @@
         android:layout_below="@id/iv_profile_home"
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_buying"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_activity" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
 
     <TextView
         android:id="@+id/tv_profile_buying"
-        android:onClick="openBuying"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="Buying"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="openBuying"
+        android:text="Bought Tickets"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_selling"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_activity"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -106,13 +107,13 @@
 
     <TextView
         android:id="@+id/tv_profile_selling"
-        android:onClick="openSelling"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="Selling"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="openSelling"
+        android:text="Posted Tickets"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_settings"
@@ -166,6 +167,7 @@
         android:layout_marginRight="20dp"
         android:onClick="logout"
         android:text="Logout"
+        android:textColor="@color/colorPrimaryLight"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

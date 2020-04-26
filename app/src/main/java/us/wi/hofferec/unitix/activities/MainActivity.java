@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Apply the users profile picture
         setProfileImage();
+
+        TextView tv_username = findViewById(R.id.tv_main_username);
+        tv_username.setText("Welcome " + LoginActivity.user.getUsername());
 
         // Check if the user's tickets have been sold. If so, sends notification.
         if ((boolean) LoginActivity.user.getSettings().get("notifications"))

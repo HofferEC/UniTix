@@ -47,6 +47,8 @@ public class ProfileActivity extends AppCompatActivity {
         emailTV.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         profileImage = findViewById(R.id.iv_profile_profile);
+        TextView tv_username = (findViewById(R.id.tv_profile_username));
+        tv_username.setText(LoginActivity.user.getUsername());
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
