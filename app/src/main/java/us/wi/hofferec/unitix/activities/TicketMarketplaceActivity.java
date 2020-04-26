@@ -288,13 +288,15 @@ public class TicketMarketplaceActivity extends AppCompatActivity {
     public List<Ticket> searchTicketsForText(final String searchTerm){
         if (searchTerm == null || searchTerm.isEmpty())
             return ticketsList;
+        // reduce everything to lowercase to remove case sensitive results
+        String searchTermLowerCase = searchTerm.toLowerCase();
         ArrayList<Ticket> filteredTicketsList = new ArrayList<>();
         for (Ticket t : ticketsList){
-            if (t.getDate().contains(searchTerm)
-                || t.getEvent().contains(searchTerm)
-                || t.getPrice().contains(searchTerm)
-                || t.getHomeTeam().contains(searchTerm)
-                || t.getAwayTeam().contains(searchTerm)) {
+            if (t.getDate().toLowerCase().contains(searchTermLowerCase)
+                || t.getEvent().toLowerCase().contains(searchTermLowerCase)
+                || t.getPrice().toLowerCase().contains(searchTermLowerCase)
+                || t.getHomeTeam().toLowerCase().contains(searchTermLowerCase)
+                || t.getAwayTeam().toLowerCase().contains(searchTermLowerCase)) {
                 filteredTicketsList.add(t);
             }
         }
