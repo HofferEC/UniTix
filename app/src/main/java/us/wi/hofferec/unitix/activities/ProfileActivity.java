@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -31,6 +32,7 @@ import us.wi.hofferec.unitix.data.Utility;
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profileImage;
+    private TextView emailTV;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -40,6 +42,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Get sharedPreferences
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        emailTV = findViewById(R.id.tv_profile_email);
+        emailTV.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         profileImage = findViewById(R.id.iv_profile_profile);
 
