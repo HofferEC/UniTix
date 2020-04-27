@@ -21,6 +21,7 @@ public class Ticket implements Serializable {
     private String uid;
     private String ticketPath;
     private boolean seen;
+    private String seller;
 
     /**
      * Empty Constructor (Used for FireStore serialization)
@@ -38,7 +39,7 @@ public class Ticket implements Serializable {
      * @param available is the ticket available
      * @param price price
      */
-    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean available, boolean retracted, String price, String uid) {
+    public Ticket(String date, String homeTeam, String awayTeam, String event, boolean available, boolean retracted, String price, String uid, String seller) {
         this.date = date;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -48,6 +49,7 @@ public class Ticket implements Serializable {
         this.price = price;
         this.uid = uid;
         this.seen = false;
+        this.seller = seller;
     }
 
     /**
@@ -228,6 +230,9 @@ public class Ticket implements Serializable {
         this.event = event;
     }
 
+    public void setSeller(String seller) {this.seller = seller;}
+    public String getSeller() {return this.seller;}
+
     /**
      * Will simulate a list of tickets
      *
@@ -253,6 +258,7 @@ public class Ticket implements Serializable {
         boolean isRetracted;
         String price = "10.35";
         String uid = "0";
+        String seller = null;
 
         for(int i = 0 ; i < numTickets ; i++) {
             awayTeamRand = getRandomIntegerBetweenRange(0, teams.length - 1);
@@ -261,7 +267,7 @@ public class Ticket implements Serializable {
             isAvailableRand = getRandomIntegerBetweenRange(0, 1);
             isAvailable = isAvailableRand == 1;
             isRetracted = false;
-            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable, isRetracted, price, uid);
+            Ticket ticket = new Ticket(date, teams[homeTeamRand], teams[awayTeamRand], events[eventsRand], isAvailable, isRetracted, price, uid, seller);
             tickets.add(ticket);
         }
 

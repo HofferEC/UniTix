@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -212,6 +213,7 @@ public class SellTicketActivity extends AppCompatActivity {
         bundle.putString("awayTeam", awayTeam);
         bundle.putString("price", price);
         bundle.putBoolean("available", true);
+        bundle.putString("seller", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         // Upload the ticket file
         try {
