@@ -179,7 +179,6 @@ public class Utility {
                         }
                     }
                 });
-                task.wait();
             } catch (Exception e) {
                 Log.e(TAG, "Error deserializing document result to Ticket: " + ticketsSelling.get(i).getId()
                         + "\n" + e.getMessage());
