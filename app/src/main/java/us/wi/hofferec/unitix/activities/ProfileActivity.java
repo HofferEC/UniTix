@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,63 +32,90 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profileImage;
     private TextView emailTV;
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Get sharedPreferences
-        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        /*
+        We need to add this if() because for some reason this onCreate method is called after
+         executing logout(). In logout(), we are clearing the activity stack and starting fresh with
+         LoginActivity, so I don't see how this onCreate method is being called. If you
+         */
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-        emailTV = findViewById(R.id.tv_profile_email);
-        emailTV.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            emailTV = findViewById(R.id.tv_profile_email);
+            emailTV.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-        profileImage = findViewById(R.id.iv_profile_profile);
-        TextView tv_username = (findViewById(R.id.tv_profile_username));
-        tv_username.setText(LoginActivity.user.getUsername());
+            profileImage = findViewById(R.id.iv_profile_profile);
+            TextView tv_username = (findViewById(R.id.tv_profile_username));
+            tv_username.setText(LoginActivity.user.getUsername());
 
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            // If user clicks profile image, they can change it
+            profileImage.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 int PICK_IMAGE = 1;
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-            }
-        });
+            });
 
-        // Apply the users profile picture
-        setProfileImage();
+            // Apply the users profile picture
+            setProfileImage();
+        }
     }
 
+    /**
+     * Go to Main activity.
+     *
+     * @param view current view
+     */
     public void goToHome(View view){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
+    /**
+     * Logout the current user and go to Login activity.
+     *
+     * @param view current view
+     */
     public void logout(View view){
-        sharedPreferences.edit().remove("USER").apply();
         FirebaseAuth.getInstance().signOut();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // This will completely clear activity stack and start from scratch at Login activity
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
+    /**
+     * Go to ProfileSelling activity.
+     *
+     * @param view current view
+     */
     public void openSelling(View view){
         Intent intent = new Intent(getApplicationContext(), ProfileSellingActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Go to ProfileBuying activity.
+     *
+     * @param view current view
+     */
     public void openBuying(View view) {
         Intent intent = new Intent(getApplicationContext(), ProfileBuyingActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Go to Settings activity.
+     *
+     * @param view current view
+     */
     public void openSettingsFragment(View view) {
         Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(intent);
@@ -115,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         if(resultCode == Activity.RESULT_OK) {
             assert imageReturnedIntent != null;
-            uploadImageToDatabase("SettingsFragment", imageReturnedIntent);
+            uploadImageToDatabase("ProfileActivity (Upload Profile Image)", imageReturnedIntent);
         }
     }
 
@@ -149,20 +175,16 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.i(TAG, "Successfully added image: " + imageUUID + " to cloud storage");
 
                 storage.getReference().child("Profile Images/" + imageUUID).getDownloadUrl()
-                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                LoginActivity.user.setProfileImageUri(uri.toString());
-                                Utility.updateUserDatabase("Factory");
-                                finish();
-                                startActivity(getIntent());
-                            }
+                        .addOnSuccessListener(uri -> {
+                            LoginActivity.user.setProfileImageUri(uri.toString());
+                            Utility.updateUserDatabase(TAG);
+
+                            // Restart this activity again with the updated picture
+                            finish();
+                            startActivity(getIntent());
                         })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Log.e(TAG, "Error retrieving uri for image: " + imageUUID + " in cloud storage, " + exception.getMessage());
-                            }
+                        .addOnFailureListener(exception -> {
+                            Log.e(TAG, "Error retrieving uri for image: " + imageUUID + " in cloud storage, " + exception.getMessage());
                         });
             }
         });

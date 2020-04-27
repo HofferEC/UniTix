@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         // Apply the users profile picture
         setProfileImage();
 
+        // Display greeting
         TextView tv_username = findViewById(R.id.tv_main_username);
         tv_username.setText("Welcome " + LoginActivity.user.getUsername());
 
@@ -32,20 +33,35 @@ public class MainActivity extends AppCompatActivity {
         if ((boolean) LoginActivity.user.getSettings().get("notifications"))
             Utility.checkForSoldTickets(getApplicationContext(), "MainActivity", LoginActivity.user);
 
+        // Setup image flipping animation
         setupImageFlipper();
-
     }
 
+    /**
+     * Go to TicketMarketplace activity.
+     *
+     * @param view current view
+     */
     public void openMarketplace(View view) {
         Intent intent = new Intent(getApplicationContext(), TicketMarketplaceActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Go to SellTicket activity.
+     *
+     * @param view current view
+     */
     public void sellTicket(View view) {
         Intent intent = new Intent(getApplicationContext(), SellTicketActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Go to Profile activity.
+     *
+     * @param view current view
+     */
     public void goToProfile(View view){
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
@@ -65,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Setup for flipping images on the home screen.
+     */
     public void setupImageFlipper(){
         ViewFlipper flipper = findViewById(R.id.vf_main);
         flipper.setFlipInterval(7000);
@@ -72,4 +91,5 @@ public class MainActivity extends AppCompatActivity {
         flipper.setOutAnimation(this, R.anim.slide_out_left);
         flipper.startFlipping();
     }
+
 }

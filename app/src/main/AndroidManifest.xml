@@ -28,6 +28,7 @@
         <activity android:name=".activities.ProfileSellingActivity" />
         <activity android:name=".activities.ProfileBuyingActivity" />
         <activity android:name=".activities.MainActivity" />
+
         <activity
             android:name=".activities.SettingsActivity"
             android:label="Settings"
@@ -36,14 +37,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.ProfileActivity" />
         </activity>
+
         <activity android:name=".fragments.SettingsFragment" />
+
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Enabling this flag is required in order to use the PaymentsClient -->
+
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />

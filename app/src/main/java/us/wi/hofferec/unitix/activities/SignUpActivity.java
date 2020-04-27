@@ -113,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            Log.d("SignUpActivity", "Creating document for user: " + userUID);
+                            Log.i("SignUpActivity", "Creating document for user: " + userUID);
 
                             // Get the current authenticated users email
                             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -131,14 +131,11 @@ public class SignUpActivity extends AppCompatActivity {
 
                             database.collection("users").document(userUID).set(LoginActivity.user);
 
-                            // add user to SharedPreferences to persist login
-                            sharedPreferences.edit().putString("USER", userUID).apply();
-
                             // Go to home screen, since all the information is loaded
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            // This will completely clear the activity stack so when the user clicks back, it will not go back to the login
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-                            finish();
-
                         }
                         else {
                             Log.d("LoginActivity", "accessing database failed with ", task.getException());
