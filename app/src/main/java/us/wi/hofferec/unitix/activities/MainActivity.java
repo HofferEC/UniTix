@@ -1,9 +1,11 @@
 package us.wi.hofferec.unitix.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,10 @@ import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.Utility;
@@ -35,6 +41,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup image flipping animation
         setupImageFlipper();
+
+        // store the device token with the user
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        LoginActivity.user.setToken(token);
+                        Utility.updateUserDatabase("MainActivity");
+                        Log.i("instance", token );
+                    }
+                });
     }
 
     /**

@@ -1,14 +1,20 @@
 package us.wi.hofferec.unitix.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.Utility;
@@ -47,6 +53,7 @@ public class TicketPostedActivity extends AppCompatActivity {
 
         // Add the ticket to the tickets database as well as associate it with the user
         Utility.addTicketToDatabaseAndUser("TicketPostedActivity", ticket, "selling");
+
     }
 
     public void goToHome(View view) {

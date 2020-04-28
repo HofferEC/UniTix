@@ -19,6 +19,7 @@ public class User {
     private String dateOfBirth;
     private String phone;
     private String profileImageUri;
+    private String token;
 
     /**
      * Empty Constructor (Used for FireStore serialization).
@@ -46,7 +47,7 @@ public class User {
      * @param phone phone
      * @param username username
      */
-    public User(String email, List<DocumentReference> ticketsSelling, List<DocumentReference> ticketsBuying, String dateOfBirth, String phone, String username, HashMap<String, Object> settings) {
+    public User(String email, List<DocumentReference> ticketsSelling, List<DocumentReference> ticketsBuying, String dateOfBirth, String phone, String username, HashMap<String, Object> settings, String token) {
         this.email = email;
         this.ticketsSelling = ticketsSelling;
         this.ticketsBuying = ticketsBuying;
@@ -54,6 +55,7 @@ public class User {
         this.phone = phone;
         this.username = username;
         this.settings = settings;
+        this.token = token;
     }
 
     /**
@@ -186,6 +188,10 @@ public class User {
             ticketsSelling = new ArrayList<>();
         this.ticketsSelling = ticketsSelling;
     }
+
+    public String getToken() { return this.token; }
+
+    public void setToken(String token) { this.token = token; }
 
     /**
      * Add a ticket to this users selling history.
