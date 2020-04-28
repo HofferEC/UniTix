@@ -20,6 +20,7 @@ public class User {
     private String phone;
     private String profileImageUri;
     private String token;
+    private double balance;
 
     /**
      * Empty Constructor (Used for FireStore serialization).
@@ -36,6 +37,7 @@ public class User {
         this.email = email;
         this.settings = settings;
         this.username = username;
+        this.balance = 0;
     }
 
     /**
@@ -251,5 +253,23 @@ public class User {
      */
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    /**
+     * Getter for balance.
+     *
+     * @return current balance
+     */
+    public double getBalance() {
+        return this.balance;
+    }
+
+    /**
+     * Setter for balance.
+     *
+     * @param balance balance to set
+     */
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }

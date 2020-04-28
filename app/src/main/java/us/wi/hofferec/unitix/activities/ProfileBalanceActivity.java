@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,11 +39,16 @@ public class ProfileBalanceActivity extends AppCompatActivity {
     private ProfileTicketsBuyingAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private TextView balanceTV;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_balance);
+
+        balanceTV = findViewById(R.id.tv_profile_balance_view);
+        String balance = String.format("%.2f", LoginActivity.user.getBalance());
+        balanceTV.setText("$" + balance);
 
         checkPerms("ProfileBuyingActivity");
         setupRecyclerView();
