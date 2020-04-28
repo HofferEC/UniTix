@@ -92,6 +92,16 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     /**
+     * Go to ProfileBalacne activity.
+     *
+     * @param view current view
+     */
+    public void openBalance(View view){
+        Intent intent = new Intent(getApplicationContext(), ProfileBalanceActivity.class);
+        startActivity(intent);
+    }
+
+    /**
      * Go to ProfileSelling activity.
      *
      * @param view current view

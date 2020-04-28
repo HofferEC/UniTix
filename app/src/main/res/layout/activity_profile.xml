@@ -55,28 +55,43 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:text="Username"
         android:textColor="@color/colorAccent"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tv_profile_buying"
+        app:layout_constraintBottom_toTopOf="@+id/tv_profile_balance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.126"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_profile_profile"
-        app:layout_constraintVertical_bias="0.123"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_height="1dp"
         android:layout_below="@id/iv_profile_home"
         android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/tv_profile_balance"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_username"
+        tools:layout_editor_absoluteX="15dp" />
+
+    <TextView
+        android:id="@+id/tv_profile_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="openBalance"
+        android:text="Balance"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_buying"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
     <TextView
         android:id="@+id/tv_profile_buying"
@@ -93,17 +108,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
     <LinearLayout
+        android:id="@+id/linearLayout8"
         android:layout_width="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_height="1dp"
         android:layout_below="@id/iv_profile_home"
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_selling"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_buying" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_buying"
+        tools:layout_editor_absoluteX="15dp" />
 
     <TextView
         android:id="@+id/tv_profile_selling"
@@ -120,26 +135,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_buying" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8" />
 
     <LinearLayout
+        android:id="@+id/linearLayout7"
         android:layout_width="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_height="1dp"
         android:layout_below="@id/iv_profile_home"
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_settings"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_selling" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_selling"
+        tools:layout_editor_absoluteX="15dp" />
 
     <TextView
         android:id="@+id/tv_profile_settings"
-        android:onClick="openSettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="openSettingsFragment"
         android:text="Settings"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -147,17 +162,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_selling" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_height="1dp"
         android:layout_below="@id/iv_profile_home"
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/tv_profile_logout"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_settings" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_settings"
+        tools:layout_editor_absoluteX="15dp" />
 
     <TextView
         android:id="@+id/tv_profile_logout"
@@ -165,6 +180,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:onClick="logout"
         android:text="Logout"
         android:textColor="@color/colorPrimaryLight"
@@ -172,18 +188,28 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_settings" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
     <TextView
         android:id="@+id/tv_profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#B1B1B1"
-        app:layout_constraintBottom_toTopOf="@+id/tv_profile_activity"
+        app:layout_constraintBottom_toTopOf="@+id/tv_profile_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_profile_profile" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/iv_profile_home"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/tv_profile_buying"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_balance"
+        tools:layout_editor_absoluteX="15dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
