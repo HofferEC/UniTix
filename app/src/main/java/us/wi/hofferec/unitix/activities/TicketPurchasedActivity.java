@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import us.wi.hofferec.unitix.R;
@@ -39,6 +40,9 @@ public class TicketPurchasedActivity extends AppCompatActivity {
                 "Teams: " + ticket.getAwayTeam() + " @ " + ticket.getHomeTeam() + "\n\n" +
                 "Date: " + ticket.getDate() + "\n\n" +
                 "Price: $" + ticket.getPrice());
+
+        LoginActivity.user.setBalance(LoginActivity.user.getBalance()-Double.parseDouble(ticket.getPrice()));
+        // seller's balance is updated in a cloud function
 
         checkPermsAndDownloadTicket("TicketPurchasedActivity");
     }
