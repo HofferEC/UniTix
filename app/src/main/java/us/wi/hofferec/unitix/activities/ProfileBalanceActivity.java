@@ -30,13 +30,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.adapters.ProfileTicketsBalanceAdapter;
 import us.wi.hofferec.unitix.adapters.ProfileTicketsBuyingAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
 
 public class ProfileBalanceActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ProfileTicketsBuyingAdapter adapter;
+    private ProfileTicketsBalanceAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private TextView balanceTV;
@@ -88,6 +89,7 @@ public class ProfileBalanceActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             List<DocumentReference> list = (List<DocumentReference>) document.get("ticketsBuying");
+                            list.addAll((List<DocumentReference>) document.get("ticketsSelling"));
                             List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
                             if (list != null) {
                                 for (DocumentReference documentReference : list) {
@@ -100,7 +102,6 @@ public class ProfileBalanceActivity extends AppCompatActivity {
                             Tasks.whenAllSuccess(tasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
                                 @Override
                                 public void onSuccess(List<Object> list) {
-
                                     // This list now contains all the tickets as snapshots
                                     // Convert each snapshot to its object type
                                     for (Object object : list) {
@@ -109,7 +110,7 @@ public class ProfileBalanceActivity extends AppCompatActivity {
                                     }
                                     Log.i("ProfileBuyingActivity", "Successfully loaded " + list.size() + " ticket for user: " + firebaseUser.getUid());
 
-                                    adapter = new ProfileTicketsBuyingAdapter(data, context);
+                                    adapter = new ProfileTicketsBalanceAdapter(data, context);
                                     recyclerView.setAdapter(adapter);
 
                                 }
