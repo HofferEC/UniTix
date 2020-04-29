@@ -115,4 +115,7 @@ public class MainActivity extends AppCompatActivity {
         flipper.startFlipping();
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 }

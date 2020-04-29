@@ -205,4 +205,8 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

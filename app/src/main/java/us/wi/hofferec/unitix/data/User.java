@@ -191,9 +191,23 @@ public class User {
         this.ticketsSelling = ticketsSelling;
     }
 
-    public String getToken() { return this.token; }
+    /**
+     * Getter for token.
+     *
+     * @return current token
+     */
+    public String getToken() {
+        return this.token;
+    }
 
-    public void setToken(String token) { this.token = token; }
+    /**
+     * Setter for token.
+     *
+     * @param token token to set
+     */
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     /**
      * Add a ticket to this users selling history.
