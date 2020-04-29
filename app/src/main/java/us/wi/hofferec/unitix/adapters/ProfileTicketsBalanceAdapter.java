@@ -1,6 +1,7 @@
 package us.wi.hofferec.unitix.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,10 @@ public class ProfileTicketsBalanceAdapter extends RecyclerView.Adapter<ProfileTi
         StringBuilder price = new StringBuilder();
         if (!tickets.get(position).getSeller().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             price.append("-");
+            ticketHolder.priceTextView.setTextColor(Color.RED);
+        }
+        else {
+            ticketHolder.priceTextView.setTextColor(Color.GREEN);
         }
 
         if (LoginActivity.user.getSettings().get("currency").equals("USD")){
