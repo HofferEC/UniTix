@@ -106,7 +106,7 @@ public class ProfileBalanceActivity extends AppCompatActivity {
                                     // Convert each snapshot to its object type
                                     for (Object object : list) {
                                         Ticket ticket = ((DocumentSnapshot) object).toObject(Ticket.class);
-                                        data.add(ticket);
+                                        if (!ticket.isAvailable() && !ticket.isRetracted()) data.add(ticket);
                                     }
                                     Log.i("ProfileBuyingActivity", "Successfully loaded " + list.size() + " ticket for user: " + firebaseUser.getUid());
 
