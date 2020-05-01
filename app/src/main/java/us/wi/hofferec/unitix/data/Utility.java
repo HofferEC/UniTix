@@ -32,6 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import us.wi.hofferec.unitix.activities.LoginActivity;
+import us.wi.hofferec.unitix.activities.MainActivity;
 import us.wi.hofferec.unitix.activities.PDFViewerActivity;
 import us.wi.hofferec.unitix.helpers.Notifications;
 import us.wi.hofferec.unitix.interfaces.CurrencyInterface;
@@ -78,7 +79,6 @@ public class Utility {
                     }
                 });
     }
-
 
     /**
      * Updates a ticket in the tickets database.
@@ -327,4 +327,33 @@ public class Utility {
         target.putExtra("filepath", f.getPath());
         context.startActivity(target);
     }
+
+    public static void updateUser(final String TAG) {
+
+        // Database context
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+
+        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        database.collection("users").document(userUID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+
+                            // Map the data from the document to the user object
+                            LoginActivity.user = document.toObject(User.class);
+
+                            Log.i(TAG, "Retrieved data for user: " + userUID + ": " + document.getData());
+                        } else {
+                            Log.w(TAG, "Unable to find document for user: " + userUID + ", creating document now");
+                        }
+
+                    } else {
+                        Log.e(TAG, "accessing database failed with ", task.getException());
+                    }
+                });
+    }
+
 }
