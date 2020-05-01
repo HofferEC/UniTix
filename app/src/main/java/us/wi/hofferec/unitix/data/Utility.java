@@ -155,37 +155,6 @@ public class Utility {
 
     }
 
-    public static void checkForSoldTickets(final Context context, final String TAG, User user){
-        final List<DocumentReference> ticketsSelling = user.getTicketsSelling();
-
-        for (int i = 0; i < ticketsSelling.size(); i++) {
-            try {
-                final Task task = ticketsSelling.get(i).get().addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-
-                        Ticket ticket = snapshot.toObject(Ticket.class);
-
-                        if (!ticket.isAvailable() && !ticket.isSeen()) {
-                            Notifications.notifyTicketIsSold(context, ticket);
-                            ticket.setSeen(true);
-                            // Rewrite the ticket to the database to update seen value
-                            updateTicketOnDatabase("Utility", ticket);
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                Log.e(TAG, "Error deserializing document result to Ticket: " + ticketsSelling.get(i).getId()
-                        + "\n" + e.getMessage());
-            }
-        }
-    }
-
     /**
      * Updates the currency rates for the day
      */

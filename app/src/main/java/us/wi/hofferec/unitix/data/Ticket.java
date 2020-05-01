@@ -20,7 +20,6 @@ public class Ticket implements Serializable {
     private boolean retracted;
     private String uid;
     private String ticketPath;
-    private boolean seen;
     private String seller;
 
     /**
@@ -48,27 +47,11 @@ public class Ticket implements Serializable {
         this.retracted = retracted;
         this.price = price;
         this.uid = uid;
-        this.seen = false;
         this.seller = seller;
     }
 
-    /**
-     * Getter for seen.
-     *
-     * @return current seen
-     */
-    public boolean isSeen() {
-        return seen;
-    }
 
-    /**
-     * Setter for seen.
-     *
-     * @param seen seen to set
-     */
-    public void setSeen(boolean seen) {
-        this.seen = seen;
-    }
+
 
     /**
      * Getter for ticketPath.
