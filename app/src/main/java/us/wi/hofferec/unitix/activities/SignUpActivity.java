@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
 import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.data.User;
 
@@ -131,6 +133,10 @@ public class SignUpActivity extends AppCompatActivity {
 
                             database.collection("users").document(userUID).set(LoginActivity.user);
 
+                            // Apply custom user settings
+                            if(LoginActivity.user.getSettings() != null)
+                                applyCustomUserSettings();
+
                             // Go to home screen, since all the information is loaded
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             // This will completely clear the activity stack so when the user clicks back, it will not go back to the login
@@ -142,5 +148,38 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    /**
+     * Helper method used to set user specific settings
+     */
+    private void applyCustomUserSettings(){
+
+        // Have to switch shared preferences to the one that holds our settings
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Apply dark mode
+        if (LoginActivity.user.getSettings().get("darkMode") != null) {
+            if (((Boolean) LoginActivity.user.getSettings().get("darkMode"))) {
+                sharedPreferences.edit().putBoolean("darkModeEnabled", true).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            else {
+                sharedPreferences.edit().putBoolean("darkModeEnabled", false).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        }
+
+        // Apply notifications settings
+        if (LoginActivity.user.getSettings().get("notifications") != null) {
+            if ((Boolean) LoginActivity.user.getSettings().get("notifications")) {
+                sharedPreferences.edit().putBoolean("notificationsKey", true).apply();
+            }
+            else {
+                sharedPreferences.edit().putBoolean("notificationsKey", false).apply();
+            }
+        }
+
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
     }
 }
