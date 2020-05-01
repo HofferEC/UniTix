@@ -21,7 +21,7 @@ public class Notifications {
 
     // Initiates notification and marks the transaction as unavailable on the Firebase
     public static void notifyTicketIsSold(Context context, Ticket ticket){
-        sendSoldNotification(context, ticket);
+        //sendSoldNotification(context, ticket);
         ticket.setAvailable(false);
         Utility.updateTicketOnDatabase("Notifications", ticket);
     }
