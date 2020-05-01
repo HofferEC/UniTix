@@ -49,14 +49,33 @@ public class ProfileBalanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_balance);
 
         balanceTV = findViewById(R.id.tv_profile_balance_view);
-        Utility.updateUser("ProfileBalanceActivity");
         String balance;
         if (LoginActivity.user.getBalance() < 0.0) {
+
             balance = String.format("%.2f", -LoginActivity.user.getBalance());
-            balanceTV.setText("-$" + balance);
+
+            if (LoginActivity.user.getSettings().get("currency").equals("USD")){
+                balanceTV.setText("-$" + balance);
+            }
+            else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
+                balanceTV.setText("-€" + Utility.convert(Double.parseDouble(balance), "EUR"));
+            }
+            else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
+                balanceTV.setText("-£" + Utility.convert(Double.parseDouble(balance), "GBP"));
+            }
+
         } else {
             balance = String.format("%.2f", LoginActivity.user.getBalance());
-            balanceTV.setText("$" + balance);
+
+            if (LoginActivity.user.getSettings().get("currency").equals("USD")){
+                balanceTV.setText("$" + balance);
+            }
+            else if (LoginActivity.user.getSettings().get("currency").equals("EUR")) {
+                balanceTV.setText("€" + Utility.convert(Double.parseDouble(balance), "EUR"));
+            }
+            else if (LoginActivity.user.getSettings().get("currency").equals("GBP")) {
+                balanceTV.setText("£" + Utility.convert(Double.parseDouble(balance), "GBP"));
+            }
         }
 
         checkPerms("ProfileBuyingActivity");

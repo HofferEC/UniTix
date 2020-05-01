@@ -38,6 +38,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        Utility.updateUser("ProfileBalanceActivity");
+
         /*
         We need to add this if() because for some reason this onCreate method is called after
          executing logout(). In logout(), we are clearing the activity stack and starting fresh with
