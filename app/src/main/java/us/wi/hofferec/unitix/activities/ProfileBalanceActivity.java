@@ -33,6 +33,7 @@ import us.wi.hofferec.unitix.R;
 import us.wi.hofferec.unitix.adapters.ProfileTicketsBalanceAdapter;
 import us.wi.hofferec.unitix.adapters.ProfileTicketsBuyingAdapter;
 import us.wi.hofferec.unitix.data.Ticket;
+import us.wi.hofferec.unitix.data.Utility;
 
 public class ProfileBalanceActivity extends AppCompatActivity {
 
@@ -48,6 +49,7 @@ public class ProfileBalanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_balance);
 
         balanceTV = findViewById(R.id.tv_profile_balance_view);
+        Utility.updateUser("ProfileBalanceActivity");
         String balance;
         if (LoginActivity.user.getBalance() < 0.0) {
             balance = String.format("%.2f", -LoginActivity.user.getBalance());
