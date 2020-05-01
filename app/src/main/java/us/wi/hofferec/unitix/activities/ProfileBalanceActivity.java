@@ -48,8 +48,14 @@ public class ProfileBalanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_balance);
 
         balanceTV = findViewById(R.id.tv_profile_balance_view);
-        String balance = String.format("%.2f", LoginActivity.user.getBalance());
-        balanceTV.setText("$" + balance);
+        String balance;
+        if (LoginActivity.user.getBalance() < 0.0) {
+            balance = String.format("%.2f", -LoginActivity.user.getBalance());
+            balanceTV.setText("-$" + balance);
+        } else {
+            balance = String.format("%.2f", LoginActivity.user.getBalance());
+            balanceTV.setText("$" + balance);
+        }
 
         checkPerms("ProfileBuyingActivity");
         setupRecyclerView();
