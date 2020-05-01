@@ -328,6 +328,11 @@ public class Utility {
         context.startActivity(target);
     }
 
+    /**
+     * Updates the local user based on any changes made in firebase
+     *
+     * @param TAG tag
+     */
     public static void updateUser(final String TAG) {
 
         // Database context

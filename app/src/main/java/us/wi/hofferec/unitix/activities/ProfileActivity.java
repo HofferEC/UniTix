@@ -18,6 +18,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -26,6 +28,7 @@ import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import us.wi.hofferec.unitix.R;
+import us.wi.hofferec.unitix.data.User;
 import us.wi.hofferec.unitix.data.Utility;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -37,8 +40,6 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        Utility.updateUser("ProfileBalanceActivity");
 
         /*
         We need to add this if() because for some reason this onCreate method is called after
@@ -99,8 +100,34 @@ public class ProfileActivity extends AppCompatActivity {
      * @param view current view
      */
     public void openBalance(View view){
-        Intent intent = new Intent(getApplicationContext(), ProfileBalanceActivity.class);
-        startActivity(intent);
+
+        // Database context
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+
+        final String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        database.collection("users").document(userUID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+
+                            // Map the data from the document to the user object
+                            LoginActivity.user = document.toObject(User.class);
+
+                            Intent intent = new Intent(getApplicationContext(), ProfileBalanceActivity.class);
+                            startActivity(intent);
+
+                            Log.i("ProfileActivity", "Retrieved data for user: " + userUID + ": " + document.getData());
+                        } else {
+                            Log.w("ProfileActivity", "Unable to find document for user: " + userUID + ", creating document now");
+                        }
+
+                    } else {
+                        Log.e("ProfileActivity", "accessing database failed with ", task.getException());
+                    }
+                });
     }
 
     /**
