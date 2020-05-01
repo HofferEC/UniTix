@@ -2,6 +2,7 @@ package us.wi.hofferec.unitix.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,15 +69,21 @@ public class ProfileTicketsBalanceAdapter extends RecyclerView.Adapter<ProfileTi
     @Override
     public void onBindViewHolder(@NonNull final TicketHolder ticketHolder, int position) {
 
-        ticketHolder.eventTextView.setText(tickets.get(position).getEvent());
+        Ticket ticket = tickets.get(position);
 
-        StringBuilder info = new StringBuilder(tickets.get(position).getAwayTeam() + " @ " + tickets.get(position).getHomeTeam());
+        ticketHolder.eventTextView.setText(ticket.getEvent());
+
+        StringBuilder info = new StringBuilder(ticket.getAwayTeam() + " @ " + ticket.getHomeTeam());
         ticketHolder.infoTextView.setText(info);
 
-        ticketHolder.dateTextView.setText(tickets.get(position).getDate());
+        ticketHolder.dateTextView.setText(ticket.getDate());
 
         StringBuilder price = new StringBuilder();
-        if (!tickets.get(position).getSeller().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid() == null) {
+            Log.e("ProfileTicketAdapter", "User's UID is null! User has outdated tickets.");
+        } else if (ticket.getSeller() == null) {
+            Log.e("ProfileTicketAdapter", "Seller field is null! User has outdated tickets.");
+        } else if (!ticket.getSeller().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             price.append("-");
             ticketHolder.priceTextView.setTextColor(Color.RED);
         }

@@ -46,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
             emailTV = findViewById(R.id.tv_profile_email);
-            emailTV.setText(LoginActivity.user.getEmail());
+            emailTV.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
             profileImage = findViewById(R.id.iv_profile_profile);
             TextView tv_username = (findViewById(R.id.tv_profile_username));
