@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
         tv_username.setText("Welcome " + LoginActivity.user.getUsername());
 
         // Check if the user's tickets have been sold. If so, sends notification.
-        if ((boolean) LoginActivity.user.getSettings().get("notifications"))
-            Utility.checkForSoldTickets(getApplicationContext(), "MainActivity", LoginActivity.user);
 
         // Setup image flipping animation
         setupImageFlipper();
