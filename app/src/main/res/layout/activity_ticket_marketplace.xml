@@ -85,7 +85,7 @@
 
         <TextView
             android:id="@+id/tv_marketplace_event"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Event"
@@ -94,7 +94,7 @@
 
         <TextView
             android:id="@+id/tv_marketplace_teams"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Teams"
@@ -103,7 +103,7 @@
 
         <TextView
             android:id="@+id/tv_marketplace_date"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Date"
@@ -112,7 +112,7 @@
 
         <TextView
             android:id="@+id/tv_marketplace_price"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Price"
